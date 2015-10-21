@@ -21,24 +21,30 @@
 typedef enum Action { STOP, FORWARD, BACKWARD, RIGHT, LEFT };
 
 class Ubox_Engines {
-  public:
-    /*!
-      @method     
-      @abstract   Class constructor. 
-      @discussion Initializes class variables and defines the pins address of the
-      engines.
-      
-      @param
-      */
-      Ubox_Engines (uint8_t m1_pin1, uint8_t m1_pin2, uint8_t m2_pin1, uint8_t m2_pin2, uint8_t m1_pin_enable, uint8_t m2_pin_enable);
-      void setSpeed();
-      void stop ();
-      void forward ();
-      void backward ();
-      void right ();
-      void left ();
-    private:
-      void action (Action action);
+public:
+  /* Class constructor.
+    Receive two pointers to array referenced pins.
+  */
+  Ubox_Engines(uint8_t *motor1, uint8_t *motor2); 
+
+  void setSpeed(int speed); // Set the speed
+  void process(); // Process the action of engines
+  void stop(); // Set STOP action
+  void forward(); // Set FORWARD action
+  void backward(); // Set BACKWARD action
+  void right(); // Set RIGHT action
+  void left(); // Set LEFT action
+  Action action(); // Return the action value
+private:
+  uint8_t *_motor1; // Pointer to motor1 pin definitions
+  uint8_t *_motor2; // Pointer to motor2 pin definitions
+  int _speed = MIN_SPEED; // Current speed 
+  Action _action = STOP; // Current action
+
+  void setAction(Action action); // Set current action
+  void motorStop(uint8_t *motor); // Put motor to forward action
+  void motorForward(uint8_t *motor); // Put motor to forward action
+  void motorBackward(uint8_t *motor); // Put motor to backward action
 };
 
 #endif
