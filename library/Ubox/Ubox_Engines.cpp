@@ -11,6 +11,11 @@ Ubox_Engines::Ubox_Engines(uint8_t *motor1, uint8_t *motor2) {
   // set mapped motor poles to Arduino pins (via L293D)
 	_motor1 = motor1;
 	_motor2 = motor2;
+
+  for (int x = 0; x < 3; x++) {
+		pinMode(_motor1[x], OUTPUT);
+  	pinMode(_motor2[x], OUTPUT);
+  }
 }
 
 void Ubox_Engines::setSpeed(int speed) {
@@ -23,36 +28,39 @@ void Ubox_Engines::setSpeed(int speed) {
 }
 
 void Ubox_Engines::process() {
-	// Turn off engines
-	motorStop(_motor1);
-	motorStop(_motor2);
-
-	switch (_action) {
-		default: // STOP
+	if (_action != _last_action) {
+		// Turn off engines
 		motorStop(_motor1);
 		motorStop(_motor2);
-		break;
-		case FORWARD:
-		motorForward(_motor1);
-		motorForward(_motor2);
-		break;
-		case BACKWARD:
-		motorBackward(_motor1);
-		motorBackward(_motor2);
-		break;
-		case RIGHT:
-		motorForward(_motor1);
-		motorBackward(_motor2);
-		break;
-		case LEFT:
-		motorBackward(_motor1);
-		motorForward(_motor2);
-		break;
+
+		switch (_action) {
+			case STOP:
+				motorStop(_motor1);
+				motorStop(_motor2);
+				break;
+			case FORWARD:
+				motorForward(_motor1);
+				motorForward(_motor2);
+				break;
+			case BACKWARD:
+				motorBackward(_motor1);
+				motorBackward(_motor2);
+				break;
+			case RIGHT:
+				motorForward(_motor1);
+				motorBackward(_motor2);
+				break;
+			case LEFT:
+				motorBackward(_motor1);
+				motorForward(_motor2);
+				break;
+		}
 	}
+
+	_last_action = _action;
 }
 
 void Ubox_Engines::stop() {
-	setSpeed(LOW);
 	setAction(STOP);
 }
 
@@ -91,13 +99,13 @@ void Ubox_Engines::motorStop(uint8_t *motor) {
 }
 
 void Ubox_Engines::motorForward(uint8_t *motor) {
-	digitalWrite(motor[0], HIGH);
-	digitalWrite(motor[1], LOW);
+	digitalWrite(motor[0], LOW);
+	digitalWrite(motor[1], HIGH);
 	digitalWrite(motor[2], _speed);
 }
 
 void Ubox_Engines::motorBackward(uint8_t *motor) {
-	digitalWrite(motor[0], LOW);
-	digitalWrite(motor[1], HIGH);
-	digitalWrite(motor[2], _speed);
+	digitalWrite(motor[0], HIGH);
+	digitalWrite(motor[1], LOW);
+	digitalWrite(motor[2], _speed);	
 }

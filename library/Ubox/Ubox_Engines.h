@@ -40,6 +40,7 @@ private:
   uint8_t *_motor2; // Pointer to motor2 pin definitions
   int _speed = MIN_SPEED; // Current speed 
   Action _action = STOP; // Current action
+  Action _last_action = STOP; // Last action control
 
   void setAction(Action action); // Set current action
   void motorStop(uint8_t *motor); // Put motor to forward action
