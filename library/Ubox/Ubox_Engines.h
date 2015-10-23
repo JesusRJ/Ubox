@@ -11,8 +11,6 @@
 #include <Arduino.h>
 #endif
 
-#include <inttypes.h>
-
 #define MIN_SPEED 115 // Min speed to move uBox
 #define MAX_SPEED 255 // Max speed from uBox
 #define MOTOR_DELAY 30 // Time to wait action motor
@@ -27,7 +25,7 @@ public:
   */
   Ubox_Engines(uint8_t *motor1, uint8_t *motor2); 
 
-  void setSpeed(int speed); // Set the speed
+  void setSpeed(uint8_t speed); // Set the speed
   void process(); // Process the action of engines
   void stop(); // Set STOP action
   void forward(); // Set FORWARD action
@@ -38,7 +36,7 @@ public:
 private:
   uint8_t *_motor1; // Pointer to motor1 pin definitions
   uint8_t *_motor2; // Pointer to motor2 pin definitions
-  int _speed = MIN_SPEED; // Current speed 
+  uint8_t _speed = MIN_SPEED; // Current speed 
   Action _action = STOP; // Current action
   Action _last_action = STOP; // Last action control
 
