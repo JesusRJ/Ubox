@@ -14,17 +14,19 @@ void Ubox_Command::process() {
   while ( _serial->available() ) { //checa se ha byte disponivel para leitura
     delay(10); //Delay estabilizador 
     c = (char)_serial->read();
-    if (c == '#') { break; } //termina o loop quando # é detectado após a palavra
+    if (c == '#' || c == '\n') { break; } //termina o loop quando # ou \n é detectado após a palavra
     cmd += c; 
   }
 
   if (cmd.length() > 0) {
-    Serial.println(cmd); // DEBUG
-
     if (cmd.length() > 1) {
       processCommand(cmd); // Processa a string de comando
     } else {
-      processCommand(c); // Processa o caracter de comando
+      processCommand(cmd[0]); // Processa o caracter de comando
+    }
+
+    if (_onDisplay) { 
+      _onDisplay(cmd);
     }
   }
 }
@@ -34,6 +36,7 @@ void Ubox_Command::eventDisplay(commandEventHandler handler) {
 }
 
 void Ubox_Command::processCommand(String cmd) {
+  Serial.println("Processa String");
   if (cmd == CMD_VOICE_ENABLE) {
     _voice_active = true;
     Serial.println(CMD_VOICE_ENABLE);
@@ -44,15 +47,28 @@ void Ubox_Command::processCommand(String cmd) {
     Serial.println(CMD_VOICE_DISABLE);
   }
 
-  if (cmd == CMD_FORWARD || cmd == CMD_FORWARD2)  { processCommand('w'); Serial.println(CMD_FORWARD); }
-  if (cmd == CMD_BACKWARD ||cmd == CMD_BACKWARD2) { processCommand('s'); Serial.println(CMD_BACKWARD); }
-  if (cmd == CMD_LEFT || cmd == CMD_LEFT2)     { processCommand('a'); Serial.println(CMD_LEFT); }
-  if (cmd == CMD_RIGHT || cmd == CMD_RIGHT2)    { processCommand('d'); Serial.println(CMD_RIGHT); }
-  if (cmd == CMD_STOP || cmd == CMD_STOP2)     { processCommand('q'); Serial.println(CMD_STOP); }
-
-  if (_onDisplay) { 
-    Serial.print("onDisplay");
-    _onDisplay(cmd);
+  if (_voice_active) {
+    if (cmd == CMD_FORWARD) {
+      processCommand('w'); Serial.println(CMD_FORWARD);
+    } else if (cmd == CMD_FORWARD2) {
+      processCommand('w'); Serial.println(CMD_FORWARD2);
+    } else if (cmd == CMD_BACKWARD) {
+      processCommand('s'); Serial.println(CMD_BACKWARD);
+    } else if (cmd == CMD_BACKWARD2) {
+      processCommand('s'); Serial.println(CMD_BACKWARD2);
+    } else if (cmd == CMD_LEFT) {
+      processCommand('a'); Serial.println(CMD_LEFT);
+    } else if (cmd == CMD_LEFT2) {
+      processCommand('a'); Serial.println(CMD_LEFT2);
+    } else if (cmd == CMD_RIGHT) {
+      processCommand('d'); Serial.println(CMD_RIGHT);
+    } else if (cmd == CMD_RIGHT2) {
+      processCommand('d'); Serial.println(CMD_RIGHT2);
+    } else if (cmd == CMD_STOP) {
+      processCommand('q'); Serial.println(CMD_STOP);
+    } else if (cmd == CMD_STOP2) {
+      processCommand('q'); Serial.println(CMD_STOP2);
+    }
   }
 }
 

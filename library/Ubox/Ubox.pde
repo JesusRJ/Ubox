@@ -56,8 +56,7 @@ void loop() {
 }
 
 void onDisplayLine2(String& value) {
+  Serial.println("onDisplay Line2");
   lcd.setCursor(0, 1);
   lcd.print(value);
-  Serial.print(">>> ");
-  Serial.println(value);
 }
