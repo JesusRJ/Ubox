@@ -1,5 +1,5 @@
 #######################################
-# Syntax Coloring Map for OneButton
+# Syntax Coloring Map for Ubox
 #######################################
 
 
@@ -7,30 +7,52 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-callbackFunction	KEYWORD1
+Ubox_Engines	KEYWORD1
+Ubox_Command	KEYWORD1
+Ubox_Sensors	KEYWORD1
+Action	KEYWORD1
+commandEventHandler	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-setClickTicks	KEYWORD2
-setPressTicks	KEYWORD2
-attachClick	KEYWORD2
-attachDoubleClick	KEYWORD2
-attachLongPressStart	KEYWORD2
-attachLongPressStop	KEYWORD2
-attachDuringLongPress	KEYWORD2
-isLongPressed	KEYWORD2
-tick	KEYWORD2
+process	KEYWORD2
+eventDisplay	KEYWORD2
+setSpeed	KEYWORD2
+process	KEYWORD2
+stop	KEYWORD2
+forward	KEYWORD2
+backward	KEYWORD2
+right	KEYWORD2
+left	KEYWORD2
+action	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)
 #######################################
 
-OneButton	KEYWORD2
+Ubox_Engines	KEYWORD2
+Ubox_Command	KEYWORD2
+Ubox_Sensors	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
 
-
+MIN_SPEED	LITERAL1
+MAX_SPEED	LITERAL1
+MOTOR_DELAY	LITERAL1
+DEBUG_MOTOR	LITERAL1
+CMD_VOICE_ENABLE	LITERAL1
+CMD_VOICE_DISABLE	LITERAL1
+CMD_FORWARD	LITERAL1
+CMD_FORWARD2	LITERAL1
+CMD_BACKWARD	LITERAL1
+CMD_BACKWARD2	LITERAL1
+CMD_LEFT	LITERAL1
+CMD_LEFT2	LITERAL1
+CMD_RIGHT	LITERAL1
+CMD_RIGHT2	LITERAL1
+CMD_STOP	LITERAL1
+CMD_STOP2	LITERAL1
