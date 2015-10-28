@@ -14,7 +14,6 @@
 // Define os pinos de controle dos motores
 uint8_t motor1[3] = { m1_pin1, m1_pin2, m1_pin_enable };
 uint8_t motor2[3] = { m2_pin1, m2_pin2, m2_pin_enable };
-char cmd;
 
 // Inicializa o display no endereco 0x27
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);

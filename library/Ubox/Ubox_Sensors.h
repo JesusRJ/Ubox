@@ -22,9 +22,16 @@ public:
   */
   Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr);
   void process(); // Process read sensors
+  void ultrasonicOn(); // Turn On read of ultrasonic sensor
+  void ultrasonicOff(); // Turn Off read of ultrasonic sensor
+  void ldrOn(); // Turn On read of ldr sensor
+  void ldrOff(); // Turn Off read of ldr sensor
 private:
   NewPing *_ultrasonic;
   uint8_t _pin_ldr;
+
+  bool _ultrasonic_on = false;
+  bool _ldr_on = false;
 };
 
 #endif
