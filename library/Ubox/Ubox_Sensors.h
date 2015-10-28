@@ -12,18 +12,18 @@
 #endif
 
 #include <SoftwareSerial.h>
+#include <NewPing.h>
 
 class Ubox_Sensors {
 public:
   /* Class constructor.
     Parameters:
-    sonar: pointer to array referenced pins from sonar
+    ultrasonic: pointer to array referenced pins from sonar
   */
-  Ubox_Sensors(uint8_t *sonar);
-  void process(); // Process the action of engines
-  unsigned long distance(); // Return the distance value read from sonar
+  Ubox_Sensors(NewPing *ultrasonic);
+  void process(); // Process read sensors
 private:
-  unsigned long calcDistance();
+  NewPing *_ultrasonic;
 };
 
 #endif
