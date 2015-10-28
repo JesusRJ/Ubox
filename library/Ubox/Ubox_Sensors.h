@@ -20,10 +20,11 @@ public:
     Parameters:
     ultrasonic: pointer to array referenced pins from sonar
   */
-  Ubox_Sensors(NewPing *ultrasonic);
+  Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr);
   void process(); // Process read sensors
 private:
   NewPing *_ultrasonic;
+  uint8_t _pin_ldr;
 };
 
 #endif

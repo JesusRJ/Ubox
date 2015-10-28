@@ -3,8 +3,9 @@
 // -----
 // PUBLIC METHODS
 // -----
-Ubox_Sensors::Ubox_Sensors(NewPing *ultrasonic) {
+Ubox_Sensors::Ubox_Sensors(NewPing *ultrasonic, , uint8_t pin_ldr) {
   _ultrasonic = ultrasonic;
+  _pin_ldr = pin_ldr;
 }
 
 void Ubox_Sensors::process() {
