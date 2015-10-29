@@ -12,25 +12,26 @@
 #endif
 
 #include <SoftwareSerial.h>
-#include <NewPing.h>
+#include <UboxPing.h>
 
 class Ubox_Sensors {
 public:
   /* Class constructor.
     Parameters:
     ultrasonic: pointer to array referenced pins from sonar
+    pin_ldr: LDR pin
   */
-  Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr);
+  Ubox_Sensors(UboxPing *ultrasonic, uint8_t pin_ldr);
   void process(); // Process read sensors
   void ultrasonicOn(); // Turn On read of ultrasonic sensor
   void ultrasonicOff(); // Turn Off read of ultrasonic sensor
   void ldrOn(); // Turn On read of ldr sensor
   void ldrOff(); // Turn Off read of ldr sensor
 private:
-  NewPing *_ultrasonic;
+  UboxPing *_ultrasonic;
   uint8_t _pin_ldr;
 
-  bool _ultrasonic_on = false;
+  bool _ultrasonic_on = true;
   bool _ldr_on = false;
 };
 

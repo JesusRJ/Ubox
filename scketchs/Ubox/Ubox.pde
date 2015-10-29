@@ -53,8 +53,13 @@ void setup() {
 }
 
 void loop() {
-  command.process();
-  engines.process();
+  //command.process();
+  //engines.process();
+
+  while(head.available()){
+    char v = (char)head.read();
+    Serial.println(v);
+  }
 }
 
 void onDisplayLine2(String& value) {
