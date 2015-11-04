@@ -10,6 +10,7 @@
 Ubox_Engines	KEYWORD1
 Ubox_Command	KEYWORD1
 Ubox_Sensors	KEYWORD1
+UboxPing      KEYWORD1
 Action	KEYWORD1
 commandEventHandler	KEYWORD1
 

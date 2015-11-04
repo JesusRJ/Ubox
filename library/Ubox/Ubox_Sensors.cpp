@@ -3,14 +3,15 @@
 // -----
 // PUBLIC METHODS
 // -----
-Ubox_Sensors::Ubox_Sensors(UboxPing *ultrasonic, uint8_t pin_ldr) {
-  _ultrasonic = ultrasonic;
+Ubox_Sensors::Ubox_Sensors(uint8_t *ultrasonic, uint8_t pin_ldr, uint8_t pin_servo_head) {
   _pin_ldr = pin_ldr;
+  _ultrasonic = new UboxPing(ultrasonic[0], ultrasonic[1]);
+  _servo_head = new Servo(pin_servo_head);
 }
 
 void Ubox_Sensors::process() {
   if (_ultrasonic_on) {
-    unsigned long distance = _ultrasonic->ping_cm();
+    unsigned long distance = _ultrasonic.ping_cm();
     Serial.write(distance);
   }
   if (_ldr_on) {
