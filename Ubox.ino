@@ -1,17 +1,30 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <SoftwareSerial.h>
-#include <Ubox_Command.h>
-#include <Ubox_Sensors.h>
-#include <Ubox_Engines.h>
+#include <NewPing.h>
+#include "Ubox_Time.h"
+#include "Ubox_Command.h"
+#include "Ubox_Sensors.h"
+#include "Ubox_Engines.h"
+#include "Ubox_Head.h"
+
+// Default values
+#define MAX_SENSOR_DISTANCE 200
+#define INTERVAL_HEAD 500
+#define INTERVAL_ENGINES 500
+#define INTERVAL_COMMAND 500
+#define INTERVAL_SENSORS 500
 
 // Motors pins
-#define m1_pin1 4
-#define m1_pin2 5
-#define m2_pin1 6
-#define m2_pin2 7
-#define m1_pin_enable 9
-#define m2_pin_enable 10
+#define pin_m11 4
+#define pin_m12 5
+#define pin_m21 6
+#define pin_m22 7
+#define pin_m1_enable 9
+#define pin_m2_enable 10
+// Bluetooth pins
+#define pin_ble_rx 11
+#define pin_ble_tx 12
 // Ultrasonic pins
 #define pin_trigger 3
 #define pin_echo 4
@@ -20,25 +33,28 @@
 #define pin_servo_head 8 // Head Control Servo Horizontal
 
 // Define os pinos de controle dos motores
-uint8_t motor1[3] = { m1_pin1, m1_pin2, m1_pin_enable };
-uint8_t motor2[3] = { m2_pin1, m2_pin2, m2_pin_enable };
-uint8_t ultrasonic[2] = { pin_trigger, pin_echo };
+uint8_t motor1[3] = { pin_m11, pin_m12, pin_m1_enable };
+uint8_t motor2[3] = { pin_m21, pin_m22, pin_m2_enable };
 
 // Inicializa o display no endereco 0x27
 //LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 LiquidCrystal_I2C lcd(0x27);
 
 // Inicializa o bluetooth
-SoftwareSerial bluetooth(11, 12); // RX  TX
+SoftwareSerial bluetooth(pin_ble_rx, pin_ble_tx);
 
-// Inicializa o controlador de motores
-Ubox_Engines engines(motor1, motor2);
+// Inicializa o sensor ultrasonico
+NewPing ultrasonic(pin_trigger, pin_echo, MAX_SENSOR_DISTANCE);
 
-// Inicializa o controle por voz ou teclado
-Ubox_Command command(&bluetooth, &engines);
-
-// Inicializa os sensores
-Ubox_Sensors sensors(ultrasonic, pin_ldr, pin_servo_head);
+// Declara e Inicializa (na ordem):
+//   controlador da cabeca
+//   controlador de motores
+//   interpretador de comandos por voz, teclado ou serial pc
+//   controlador dos sensores
+Ubox_Head head(pin_servo_head, INTERVAL_HEAD);
+Ubox_Engines engines(motor1, motor2, INTERVAL_ENGINES);
+Ubox_Command command(&bluetooth, &head, &engines, INTERVAL_COMMAND);
+Ubox_Sensors sensors(&ultrasonic, pin_ldr, INTERVAL_SENSORS);
 
 void setup() {
   // Configure Display
@@ -49,10 +65,11 @@ void setup() {
   lcd.print("Unisys");
   lcd.setCursor(0, 1);
   lcd.print("Starting...");
-  
+
   // System setup
   Serial.begin(9600);
   bluetooth.begin(9600);
+  head.setSensors(&sensors); // Reference to sensors
   engines.setSpeed(MIN_SPEED);
   command.eventDisplay(onDisplayLine2);
   // end - System setup
@@ -65,11 +82,12 @@ void setup() {
 void loop() {
   command.process();
   sensors.process();
+  head.process();
   engines.process();
 }
 
+// Imprime informacoes na segunda linha do LCD
 void onDisplayLine2(String& value) {
-  Serial.println("onDisplay Line2");
   lcd.setCursor(0, 1);
   lcd.print(value);
 }

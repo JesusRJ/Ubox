@@ -1,13 +1,16 @@
 #include "Ubox_Command.h"
 
-Ubox_Command::Ubox_Command(SoftwareSerial *serial, Ubox_Engines *engines) {
+Ubox_Command::Ubox_Command(SoftwareSerial *serial, Ubox_Head *head, Ubox_Engines *engines, uint8_t interval) {
+  Ubox_Time::setInterval(interval);
+
   _serial = serial;
+  _head = head;
   _engines = engines;
 
   _onDisplay = 0;
 }
 
-void Ubox_Command::process() {
+void Ubox_Command::run() {
   String cmd = "";
   char c;
 

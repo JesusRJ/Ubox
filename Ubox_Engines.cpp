@@ -3,7 +3,10 @@
 // -----
 // PUBLIC METHODS
 // -----
-Ubox_Engines::Ubox_Engines(uint8_t *motor1, uint8_t *motor2) {
+
+Ubox_Engines::Ubox_Engines(uint8_t *motor1, uint8_t *motor2, uint8_t interval) {
+  Ubox_Time::setInterval(interval);
+
   // set mapped motor poles to Arduino pins (via L293D)
   _motor1 = motor1;
   _motor2 = motor2;
@@ -23,7 +26,7 @@ void Ubox_Engines::setSpeed(uint8_t speed) {
     _speed = speed;
 }
 
-void Ubox_Engines::process() {
+void Ubox_Engines::run() {
   if (_action != _last_action) {
     // Turn off engines
     motorStop(_motor1);
@@ -34,19 +37,19 @@ void Ubox_Engines::process() {
         motorStop(_motor1);
         motorStop(_motor2);
       break;
-      case FORWARD:
+      case GO_FORWARD:
         motorForward(_motor1);
         motorForward(_motor2);
       break;
-      case BACKWARD:
+      case GO_BACKWARD:
         motorBackward(_motor1);
         motorBackward(_motor2);
       break;
-      case RIGHT:
+      case GO_RIGHT:
         motorForward(_motor1);
         motorBackward(_motor2);
       break;
-      case LEFT:
+      case GO_LEFT:
         motorBackward(_motor1);
         motorForward(_motor2);
       break;
@@ -61,22 +64,22 @@ void Ubox_Engines::stop() {
 }
 
 void Ubox_Engines::forward() {
-  setAction(FORWARD);
+  setAction(GO_FORWARD);
 }
 
 void Ubox_Engines::backward() {
-  setAction(BACKWARD);
+  setAction(GO_BACKWARD);
 }
 
 void Ubox_Engines::right() {
-  setAction(RIGHT);
+  setAction(GO_RIGHT);
 }
 
 void Ubox_Engines::left() {
-  setAction(LEFT);
+  setAction(GO_LEFT);
 }
 
-Action Ubox_Engines::action() {
+ActionEngine Ubox_Engines::action() {
   return _action;
 }
 
@@ -84,7 +87,7 @@ Action Ubox_Engines::action() {
 // PRIVATE METHODS
 // -----
 
-void Ubox_Engines::setAction(Action action) {
+void Ubox_Engines::setAction(ActionEngine action) {
   _action = action;
 }
 

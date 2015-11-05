@@ -3,24 +3,27 @@
 // -----
 // PUBLIC METHODS
 // -----
-Ubox_Sensors::Ubox_Sensors(uint8_t *ultrasonic, uint8_t pin_ldr, uint8_t pin_servo_head) {
+
+Ubox_Sensors::Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr, uint8_t interval) {
+  Ubox_Time::setInterval(interval);
+  
+  _ultrasonic = ultrasonic;
   _pin_ldr = pin_ldr;
-  _ultrasonic = new UboxPing(ultrasonic[0], ultrasonic[1]);
-  _servo_head = new Servo(pin_servo_head);
+
+  pinMode(_pin_ldr, INPUT);
 }
 
-void Ubox_Sensors::process() {
-  if (_ultrasonic_on) {
-    unsigned long distance = _ultrasonic.ping_cm();
-    Serial.write(distance);
+void Ubox_Sensors::setUltrasonicState(SensorState state) { _ultrasonic_state = state; }
+void Ubox_Sensors::setLDRState(SensorState state) { _ldr_state = state; }
+
+void Ubox_Sensors::run() {
+  _distance = -1;
+  _lightness = -1;
+
+  if (_ultrasonic_state) {
+    _distance = _ultrasonic->ping_cm();
   }
-  if (_ldr_on) {
-    int lightness = analogRead(_pin_ldr);
-    Serial.write(lightness);
+  if (_ldr_state) {
+    _lightness = analogRead(_pin_ldr);
   }
 }
-
-void Ubox_Sensors::ultrasonicOn() { _ultrasonic_on = true; }
-void Ubox_Sensors::ultrasonicOff() { _ultrasonic_on = false; }
-void Ubox_Sensors::ldrOn() { _ldr_on = true; }
-void Ubox_Sensors::ldrOff() { _ldr_on = false; }

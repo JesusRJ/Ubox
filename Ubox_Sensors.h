@@ -5,36 +5,44 @@
 #ifndef Ubox_Sensors_h
 #define Ubox_Sensors_h
 
-#if (ARDUINO <  100)
-#include <WProgram.h>
+#if defined (ARDUINO) && ARDUINO >= 100
+  #include <Arduino.h>
 #else
-#include <Arduino.h>
+  #include <WProgram.h>
+  #include <pins_arduino.h>
 #endif
 
-#include <SoftwareSerial.h>
-#include <Servo.h>
-#include <UboxPing.h>
+#if defined (__AVR__)
+  #include <avr/io.h>
+  #include <avr/interrupt.h>
+#endif
 
-class Ubox_Sensors {
+#include <NewPing.h>
+#include "Ubox_Time.h"
+
+typedef enum SensorState { ON = true, OFF = false };
+
+class Ubox_Sensors : public Ubox_Time {
 public:
   /* Class constructor.
     Parameters:
-    ultrasonic: pointer to array referenced pins from sonar
+    ultrasonic: pointer to referenced NewPing object
     pin_ldr: LDR pin
-    pin_servo_head: Pin servo head horizontal move
+    interval: interval to check sensors between process
   */
-  Ubox_Sensors(uint8_t *ultrasonic, uint8_t pin_ldr, uint8_t pin_servo_head);
-  void process(); // Process read sensors
-  void ultrasonicOn(); // Turn On read of ultrasonic sensor
-  void ultrasonicOff(); // Turn Off read of ultrasonic sensor
-  void ldrOn(); // Turn On read of ldr sensor
-  void ldrOff(); // Turn Off read of ldr sensor
+  Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr, uint8_t interval);
+  void run(); // Process read sensors
+  void setUltrasonicState(SensorState state); // Turn On/Off process of ultrasonic sensor
+  void setLDRState(SensorState state); // Turn On/Off process of ldr sensor
 private:
-  bool _ultrasonic_on = false;
-  bool _ldr_on = false;
   uint8_t _pin_ldr;
-  UboxPing _ultrasonic;
-  Servo _servo_head;
+  int _lightness = -1;
+  long _distance = -1;
+
+  NewPing *_ultrasonic;
+
+  SensorState _ultrasonic_state = OFF; // Ultrasonic process state
+  SensorState _ldr_state = OFF; // LDR process state
 };
 
 #endif
