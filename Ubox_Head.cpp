@@ -7,6 +7,7 @@
 Ubox_Head::Ubox_Head(uint8_t pin_servo_head, uint8_t interval) {
   Ubox_Time::setInterval(interval);
   _servoHead.attach(pin_servo_head);
+  _servoHead.write(90);
 }
 
 void Ubox_Head::setSensors(Ubox_Sensors *sensors) {
@@ -23,9 +24,10 @@ if (_action != _last_action) {
         _servoHead.write(179);
       break;
       case LEFT:
-        _servoHead.write(0);
+        _servoHead.write(60);
       break;
       case QUIET:
+        _servoHead.write(90);
       break;
     }
   }
@@ -43,6 +45,10 @@ void Ubox_Head::right() {
 
 void Ubox_Head::left() {
   setAction(LEFT);
+}
+
+void Ubox_Head::quiet() {
+  setAction(QUIET);
 }
 
 ActionHead Ubox_Head::action() {

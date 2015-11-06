@@ -36,10 +36,11 @@ public:
   void center(); // Set CENTER action
   void right(); // Set RIGHT action
   void left(); // Set LEFT action
+  void quiet(); // Set QUIET action
   ActionHead action(); // Return the action value
 private:
   ActionHead _action = CENTER; // Current action
-  ActionHead _last_action; // Last action control
+  ActionHead _last_action = CENTER; // Last action control
   Servo _servoHead; // Servo horizontal head control
   Ubox_Sensors *_sensors; // Sensors reference
 

@@ -15,6 +15,8 @@ Ubox_Sensors::Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr, uint8_t interva
 
 void Ubox_Sensors::setUltrasonicState(SensorState state) { _ultrasonic_state = state; }
 void Ubox_Sensors::setLDRState(SensorState state) { _ldr_state = state; }
+int lightness() { return _lightness; };
+long distance() { return _distance; };
 
 void Ubox_Sensors::run() {
   _distance = -1;
