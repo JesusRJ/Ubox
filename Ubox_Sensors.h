@@ -18,11 +18,11 @@
 #endif
 
 #include <NewPing.h>
-#include "Ubox_Time.h"
+#include "Ubox_Base.h"
 
 typedef enum SensorState { ON = true, OFF = false };
 
-class Ubox_Sensors : public Ubox_Time {
+class Ubox_Sensors : public Ubox_Base {
 public:
   /* Class constructor.
     Parameters:
@@ -30,7 +30,7 @@ public:
     pin_ldr: LDR pin
     interval: interval to check sensors between process
   */
-  Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr, uint8_t interval);
+  Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr, unsigned long interval);
   void run(); // Process read sensors
   void setUltrasonicState(SensorState state); // Turn On/Off process of ultrasonic sensor
   void setLDRState(SensorState state); // Turn On/Off process of ldr sensor

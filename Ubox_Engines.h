@@ -17,7 +17,7 @@
   #include <avr/interrupt.h>
 #endif
 
-#include "Ubox_Time.h"
+#include "Ubox_Base.h"
 
 #define MIN_SPEED 115 // Min speed to move uBox
 #define MAX_SPEED 255 // Max speed from uBox
@@ -26,13 +26,13 @@
 
 typedef enum ActionEngine { STOP, GO_FORWARD, GO_BACKWARD, GO_RIGHT, GO_LEFT };
 
-class Ubox_Engines : public Ubox_Time {
+class Ubox_Engines : public Ubox_Base {
 public:
   /* Class constructor.
     Receive two pointers to array referenced pins.
     interval: interval to check sensors between process
   */
-  Ubox_Engines(uint8_t *motor1, uint8_t *motor2, uint8_t interval); 
+  Ubox_Engines(uint8_t *motor1, uint8_t *motor2, unsigned long interval); 
 
   void setSpeed(uint8_t speed); // Set the speed
   void run(); // Process the action of engines

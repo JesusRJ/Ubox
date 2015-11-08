@@ -4,8 +4,8 @@
 // PUBLIC METHODS
 // -----
 
-Ubox_Engines::Ubox_Engines(uint8_t *motor1, uint8_t *motor2, uint8_t interval) {
-  Ubox_Time::setInterval(interval);
+Ubox_Engines::Ubox_Engines(uint8_t *motor1, uint8_t *motor2, unsigned long interval) {
+  Ubox_Base::setInterval(interval);
 
   // set mapped motor poles to Arduino pins (via L293D)
   _motor1 = motor1;

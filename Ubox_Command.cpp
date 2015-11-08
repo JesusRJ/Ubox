@@ -1,7 +1,7 @@
 #include "Ubox_Command.h"
 
-Ubox_Command::Ubox_Command(SoftwareSerial *serial, Ubox_Head *head, Ubox_Engines *engines, uint8_t interval) {
-  Ubox_Time::setInterval(interval);
+Ubox_Command::Ubox_Command(SoftwareSerial *serial, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval) {
+  Ubox_Base::setInterval(interval);
 
   _serial = serial;
   _head = head;
@@ -32,10 +32,6 @@ void Ubox_Command::run() {
       _onDisplay(cmd);
     }
   }
-}
-
-void Ubox_Command::eventDisplay(commandEventHandler handler) {
-  _onDisplay = handler;
 }
 
 void Ubox_Command::processCommand(String cmd) {
@@ -75,6 +71,11 @@ void Ubox_Command::processCommand(String cmd) {
   }
 }
 
+/*
+ * Commands:
+ * w,s,a,d,q = Engines control
+ * i,k,j,l   = Head control
+ */
 void Ubox_Command::processCommand(char cmd) {
   switch (cmd) {
     case 'w':
@@ -91,6 +92,18 @@ void Ubox_Command::processCommand(char cmd) {
       break;
     case 'q':
       _engines->stop();
+      break;
+    case 'i':
+      _head->center();
+      break;
+    case 'j':
+      _head->left();
+      break;
+    case 'l':
+      _head->right();
+      break;
+    case 'k':
+      _head->quiet();
       break;
   }
 }

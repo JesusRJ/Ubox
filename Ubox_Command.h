@@ -32,14 +32,11 @@
 #define CMD_STOP2 "*parado"
 
 #include <SoftwareSerial.h>
-#include "Ubox_Time.h"
+#include "Ubox_Base.h"
 #include "Ubox_Head.h"
 #include "Ubox_Engines.h"
 
-// class Ubox_Command;
-typedef void (*commandEventHandler)(String&);
-
-class Ubox_Command : public Ubox_Time {
+class Ubox_Command : public Ubox_Base {
 public:
   /* Class constructor.
     Parameters:
@@ -48,11 +45,8 @@ public:
     engines: pointer to engines control
     interval: interval to check sensors between process
   */
-  Ubox_Command(SoftwareSerial *serial, Ubox_Head *head, Ubox_Engines *engines, uint8_t interval);
-
+  Ubox_Command(SoftwareSerial *serial, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval);
   void run();
-  void eventDisplay(commandEventHandler handler);
-
 private:
   void processCommand(String cmd);
   void processCommand(char cmd);
@@ -60,7 +54,6 @@ private:
   SoftwareSerial *_serial;
   Ubox_Head *_head;
   Ubox_Engines *_engines;
-  commandEventHandler _onDisplay; // Callback for display
   bool _voice_active = false;
 };
 

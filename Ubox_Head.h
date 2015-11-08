@@ -18,18 +18,18 @@
 #endif
 
 #include <Servo.h>
-#include "Ubox_Time.h"
+#include "Ubox_Base.h"
 #include "Ubox_Sensors.h"
 
 typedef enum ActionHead { CENTER, RIGHT, LEFT, QUIET };
 
-class Ubox_Head : public Ubox_Time {
+class Ubox_Head : public Ubox_Base {
 public:
   /* Class constructor 
     Parameters:
     pin_servo_head: Pin to head attach servo
     interval: interval to check sensors between process*/
-  Ubox_Head(uint8_t pin_servo_head, uint8_t interval); 
+  Ubox_Head(uint8_t pin_servo_head, unsigned long interval); 
 
   void setSensors(Ubox_Sensors *sensors); // Set sensors reference
   void run(); // Process the action of head
@@ -39,6 +39,8 @@ public:
   void quiet(); // Set QUIET action
   ActionHead action(); // Return the action value
 private:
+  uint8_t _pin_servo_head = 8;
+
   ActionHead _action = CENTER; // Current action
   ActionHead _last_action = CENTER; // Last action control
   Servo _servoHead; // Servo horizontal head control
