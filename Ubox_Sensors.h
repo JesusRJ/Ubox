@@ -31,11 +31,13 @@ public:
     interval: interval to check sensors between process
   */
   Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr, unsigned long interval);
-  void run(); // Process read sensors
   void setUltrasonicState(SensorState state); // Turn On/Off process of ultrasonic sensor
   void setLDRState(SensorState state); // Turn On/Off process of ldr sensor
-  int lightness(); // Get last lightness read value
   long distance(); // Get last distance read value
+  int lightness(); // Get last lightness read value
+  void run(); // Process read sensors
+  void readUltrasonic(); // Read a Ultrasonic value
+  void readLDR(); // Read actual LDR value
 private:
   uint8_t _pin_ldr;
   int _lightness = -1;

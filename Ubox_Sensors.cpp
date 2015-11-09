@@ -15,22 +15,31 @@ Ubox_Sensors::Ubox_Sensors(NewPing *ultrasonic, uint8_t pin_ldr, unsigned long i
 
 void Ubox_Sensors::setUltrasonicState(SensorState state) { _ultrasonic_state = state; }
 void Ubox_Sensors::setLDRState(SensorState state) { _ldr_state = state; }
-int Ubox_Sensors::lightness() { return _lightness; };
 long Ubox_Sensors::distance() { return _distance; };
+int Ubox_Sensors::lightness() { return _lightness; };
 
 void Ubox_Sensors::run() {
+  readUltrasonic();
+  readLDR();
+
+  String value = _ultrasonic_state ? " D: " + _distance : "";
+  value += _ldr_state ? " L: " + _lightness : "";
+
+  _onDisplay(value);
+}
+
+void Ubox_Sensors::readUltrasonic() {
   _distance = -1;
-  _lightness = -1;
-  String value;
 
   if (_ultrasonic_state) {
     _distance = _ultrasonic->ping_cm();
-    value = "D: " + String(_distance) + "     ";
   }
+}
+
+void Ubox_Sensors::readLDR() {
+  _lightness = -1;
+
   if (_ldr_state) {
     _lightness = analogRead(_pin_ldr);
-    value += "L:" + String(_lightness);
   }
-
-  _onDisplay(value);
 }
