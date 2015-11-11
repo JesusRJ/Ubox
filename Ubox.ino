@@ -67,9 +67,6 @@ void setup() {
   lcd.print("Starting...");
 
   // System setup
-  Serial.begin(9600); // Serial for PC communication
-  bluetooth.begin(9600);
-
   /* uBox objects initialization **********************/
   head.setSensors(&sensors); // Reference to sensors
   engines.setSpeed(MIN_SPEED);

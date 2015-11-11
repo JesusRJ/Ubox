@@ -1,24 +1,34 @@
 #include "Ubox_Command.h"
 
-Ubox_Command::Ubox_Command(SoftwareSerial *serial, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval) {
+Ubox_Command::Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval) {
   Ubox_Base::setInterval(interval);
 
-  _serial = serial;
+  _bluetooth = bluetooth;
   _head = head;
   _engines = engines;
-
   _onDisplay = 0;
+
+  Serial.begin(9600); // Serial for PC communication
+  _bluetooth->begin(9600);
 }
 
 void Ubox_Command::run() {
   String cmd = "";
+  String btcmd = "";
   char c;
 
-  while ( _serial->available() ) { //checa se ha byte disponivel para leitura
+  // Processa comandos enviados via USB
+  if (Serial) {
+    while (Serial.available()) {
+
+    }
+  }
+
+  while ( _bluetooth->available() ) { //checa se ha byte disponivel para leitura pelo bluetooth
     delay(10); //Delay estabilizador 
-    c = (char)_serial->read();
+    c = (char)_bluetooth->read();
     if (c == '#' || c == '\n') { break; } //termina o loop quando # ou \n é detectado após a palavra
-    cmd += c; 
+    cmd += c;
   }
 
   if (cmd.length() > 0) {
@@ -35,38 +45,35 @@ void Ubox_Command::run() {
 }
 
 void Ubox_Command::processCommand(String cmd) {
-  Serial.println("Processa String");
   if (cmd == CMD_VOICE_ENABLE) {
     _voice_active = true;
-    Serial.println(CMD_VOICE_ENABLE);
   }
 
   if (cmd == CMD_VOICE_DISABLE) {
     _voice_active = false;
-    Serial.println(CMD_VOICE_DISABLE);
   }
 
   if (_voice_active) {
     if (cmd == CMD_FORWARD) {
-      processCommand('w'); Serial.println(CMD_FORWARD);
+      processCommand('w');
     } else if (cmd == CMD_FORWARD2) {
-      processCommand('w'); Serial.println(CMD_FORWARD2);
+      processCommand('w');
     } else if (cmd == CMD_BACKWARD) {
-      processCommand('s'); Serial.println(CMD_BACKWARD);
+      processCommand('s');
     } else if (cmd == CMD_BACKWARD2) {
-      processCommand('s'); Serial.println(CMD_BACKWARD2);
+      processCommand('s');
     } else if (cmd == CMD_LEFT) {
-      processCommand('a'); Serial.println(CMD_LEFT);
+      processCommand('a');
     } else if (cmd == CMD_LEFT2) {
-      processCommand('a'); Serial.println(CMD_LEFT2);
+      processCommand('a');
     } else if (cmd == CMD_RIGHT) {
-      processCommand('d'); Serial.println(CMD_RIGHT);
+      processCommand('d');
     } else if (cmd == CMD_RIGHT2) {
-      processCommand('d'); Serial.println(CMD_RIGHT2);
+      processCommand('d');
     } else if (cmd == CMD_STOP) {
-      processCommand('q'); Serial.println(CMD_STOP);
+      processCommand('q');
     } else if (cmd == CMD_STOP2) {
-      processCommand('q'); Serial.println(CMD_STOP2);
+      processCommand('q');
     }
   }
 }

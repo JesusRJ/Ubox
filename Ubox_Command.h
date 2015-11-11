@@ -45,13 +45,13 @@ public:
     engines: pointer to engines control
     interval: interval to check sensors between process
   */
-  Ubox_Command(SoftwareSerial *serial, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval);
+  Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval);
   void run();
 private:
   void processCommand(String cmd);
   void processCommand(char cmd);
 
-  SoftwareSerial *_serial;
+  SoftwareSerial *_bluetooth;
   Ubox_Head *_head;
   Ubox_Engines *_engines;
   bool _voice_active = false;
