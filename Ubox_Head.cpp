@@ -15,23 +15,24 @@ void Ubox_Head::setSensors(Ubox_Sensors *sensors) {
 
 void Ubox_Head::run() {
   if (_action != _last_action) {
+    uint8_t position;
     _last_action = _action;
-    _servoHead.attach(_pin_servo_head);
 
     switch (_action) {
       case CENTER:
-        _servoHead.write(90);
+        position = 90;
       break;
       case RIGHT:
-        _servoHead.write(0);
+        position = map(_pos_servo_head, 0, 100, 0, 90);
       break;
       case LEFT:
-        _servoHead.write(179);
-      break;
-      case QUIET:
-        _servoHead.write(90);
+        position = map(_pos_servo_head, 0, 100, 90, 179);
       break;
     }
+
+    // Write position to head servo
+    _servoHead.attach(_pin_servo_head);
+    _servoHead.write(position);
     delay(500);
     _servoHead.detach();
   }
@@ -41,16 +42,14 @@ void Ubox_Head::center() {
   setAction(CENTER);
 }
 
-void Ubox_Head::right() {
+void Ubox_Head::right(uint8_t position) {
   setAction(RIGHT);
+  setPosition(position);
 }
 
-void Ubox_Head::left() {
+void Ubox_Head::left(uint8_t position) {
   setAction(LEFT);
-}
-
-void Ubox_Head::quiet() {
-  setAction(QUIET);
+  setPosition(position);
 }
 
 ActionHead Ubox_Head::action() {
@@ -63,4 +62,11 @@ ActionHead Ubox_Head::action() {
 
 void Ubox_Head::setAction(ActionHead action) {
   _action = action;
+}
+
+void Ubox_Head::setPosition(uint8_t position) {
+  if (position <= 100)
+    _pos_servo_head = position;
+  else
+    _pos_servo_head = 100;
 }
