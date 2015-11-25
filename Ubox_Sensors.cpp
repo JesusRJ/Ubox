@@ -22,8 +22,14 @@ void Ubox_Sensors::run() {
   readUltrasonic();
   readLDR();
 
-  String value = _ultrasonic_state ? " D: " + _distance : "";
-  value += _ldr_state ? " L: " + _lightness : "";
+  String value;
+
+  if (_ultrasonic_state) {
+    value = "D: " + String(_distance) + "  ";
+  }
+  if (_ldr_state) {
+    value += "L:" + String(_lightness);
+  }
 
   _onDisplay(value);
 }

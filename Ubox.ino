@@ -75,11 +75,10 @@ void setup() {
   command.eventDisplay(onDisplayLine2);
   sensors.eventDisplay(onDisplayLine2);
 
-  sensors.setLDRState(OFF);
+  sensors.setLDRState(ON);
   sensors.setUltrasonicState(ON);
 
   /****************************************************/
-
   // end - System setup
 
   delay(500);
