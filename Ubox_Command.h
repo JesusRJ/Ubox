@@ -47,6 +47,8 @@
 #include "Ubox_Head.h"
 #include "Ubox_Engines.h"
 
+typedef enum OperationMode { RC, AUTO };
+
 class Ubox_Command : public Ubox_Base {
 public:
   /* Class constructor.
@@ -59,13 +61,15 @@ public:
   Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval);
   void run();
 private:
-  void processCommand(String cmd);
-  void processCommand(char cmd);
-
   SoftwareSerial *_bluetooth;
   Ubox_Head *_head;
   Ubox_Engines *_engines;
+  OperationMode _mode = RC;
   bool _voice_active = false;
+
+  void processCommand(String cmd);
+  void processCommand(char cmd);
+  void parser(Stream *in);
 };
 
 #endif

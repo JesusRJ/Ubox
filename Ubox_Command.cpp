@@ -12,39 +12,10 @@ Ubox_Command::Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engi
 }
 
 void Ubox_Command::run() {
-  String ucmd = ""; // USB command
-  String bcmd = ""; // Bluetooth command
-  char c;
-
   // Serial USB command processor
-  if (Serial) {
-    while (Serial.available()) {
-      delay(10); // Delay stabilizing
-      c = (char)_bluetooth->read();
-      if (c == '#' || c == '\n') { break; } // end loop when # or \n is detected
-      ucmd += c;
-    }
-  }
-
+  parser(&Serial);
   // Bluetooth command processor
-  while ( _bluetooth->available() ) {
-    delay(10); // Delay stabilizing
-    c = (char)_bluetooth->read();
-    if (c == '#' || c == '\n') { break; } // end loop when # or \n is detected
-    bcmd += c;
-  }
-
-  if (bcmd.length() > 0) {
-    if (bcmd.length() > 1) {
-      processCommand(bcmd); // Processa a string de comando
-    } else {
-      processCommand(bcmd[0]); // Processa o caracter de comando
-    }
-
-    if (_onDisplay) { 
-      _onDisplay(bcmd);
-    }
-  }
+  parser(_bluetooth);
 }
 
 void Ubox_Command::processCommand(String cmd) {
@@ -102,5 +73,29 @@ void Ubox_Command::processCommand(char cmd) {
     case HEAD_RIGHT:
       _head->right(0);
       break;
+  }
+}
+
+void Ubox_Command::parser(Stream *in) {
+  String cmd = "";
+  char c;
+
+  while ( in->available() ) {
+    delay(10); // Delay stabilizing
+    c = (char)in->read();
+    if (c == '#' || c == '\n') { break; } // end loop when # or \n is detected
+    cmd += c;
+  }
+
+  if (cmd.length() > 0) {
+    if (cmd.length() > 1) {
+      processCommand(cmd); // Processa a string de comando
+    } else {
+      processCommand(cmd[0]); // Processa o caracter de comando
+    }
+
+    if (_onDisplay) { 
+      _onDisplay(cmd);
+    }
   }
 }
