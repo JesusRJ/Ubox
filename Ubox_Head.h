@@ -25,7 +25,7 @@ typedef enum ActionHead { CENTER, RIGHT, LEFT };
 
 class Ubox_Head : public Ubox_Base {
 public:
-  /* Class constructor 
+  /* Class constructor
     Parameters:
     pin_servo_head: Pin to head attach servo
     interval: interval to check sensors between process*/

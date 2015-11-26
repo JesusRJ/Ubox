@@ -17,7 +17,18 @@
   #include <avr/interrupt.h>
 #endif
 
-// Comandos = pt-BR
+// Engines commands
+#define ENGINES_FORWARD  'w'
+#define ENGINES_BACKWARD 's'
+#define ENGINES_LEFT     'a'
+#define ENGINES_RIGHT    'd'
+#define ENGINES_STOP     'q'
+// Head commands
+#define HEAD_CENTER 'i'
+#define HEAD_LEFT   'j'
+#define HEAD_RIGHT  'l'
+
+// Voice commands (pt-BR)
 #define CMD_VOICE_ENABLE "*ativar"
 #define CMD_VOICE_DISABLE "*desativar"
 #define CMD_FORWARD "*para frente"

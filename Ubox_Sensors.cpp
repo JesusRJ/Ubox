@@ -28,7 +28,7 @@ void Ubox_Sensors::run() {
     value = "D: " + String(_distance) + "  ";
   }
   if (_ldr_state) {
-    value += "L:" + String(_lightness);
+    value += "L: " + String(_lightness);
   }
 
   _onDisplay(value);

@@ -8,41 +8,41 @@ Ubox_Command::Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engi
   _engines = engines;
   _onDisplay = 0;
 
-  Serial.begin(9600); // Serial for PC communication
   _bluetooth->begin(9600);
 }
 
 void Ubox_Command::run() {
-  String cmd = "";
-  String btcmd = "";
+  String ucmd = ""; // USB command
+  String bcmd = ""; // Bluetooth command
   char c;
 
-  // Processa comandos enviados via USB
+  // Serial USB command processor
   if (Serial) {
     while (Serial.available()) {
-      delay(10); //Delay estabilizador
+      delay(10); // Delay stabilizing
       c = (char)_bluetooth->read();
-      if (c == '#' || c == '\n') { break; } //termina o loop quando # ou \n é detectado após a palavra
-      cmd += c;
+      if (c == '#' || c == '\n') { break; } // end loop when # or \n is detected
+      ucmd += c;
     }
   }
 
-  while ( _bluetooth->available() ) { //checa se ha byte disponivel para leitura pelo bluetooth
-    delay(10); //Delay estabilizador
+  // Bluetooth command processor
+  while ( _bluetooth->available() ) {
+    delay(10); // Delay stabilizing
     c = (char)_bluetooth->read();
-    if (c == '#' || c == '\n') { break; } //termina o loop quando # ou \n é detectado após a palavra
-    btcmd += c;
+    if (c == '#' || c == '\n') { break; } // end loop when # or \n is detected
+    bcmd += c;
   }
 
-  if (btcmd.length() > 0) {
-    if (btcmd.length() > 1) {
-      processCommand(btcmd); // Processa a string de comando
+  if (bcmd.length() > 0) {
+    if (bcmd.length() > 1) {
+      processCommand(bcmd); // Processa a string de comando
     } else {
-      processCommand(btcmd[0]); // Processa o caracter de comando
+      processCommand(bcmd[0]); // Processa o caracter de comando
     }
 
     if (_onDisplay) { 
-      _onDisplay(btcmd);
+      _onDisplay(bcmd);
     }
   }
 }
@@ -58,15 +58,15 @@ void Ubox_Command::processCommand(String cmd) {
 
   if (_voice_active) {
     if (cmd == CMD_FORWARD || cmd == CMD_FORWARD2) {
-      processCommand('w');
+      processCommand(ENGINES_FORWARD);
     } else if (cmd == CMD_BACKWARD || cmd == CMD_BACKWARD2) {
-      processCommand('s');
+      processCommand(ENGINES_BACKWARD);
     } else if (cmd == CMD_LEFT || cmd == CMD_LEFT2) {
-      processCommand('a');
+      processCommand(ENGINES_LEFT);
     } else if (cmd == CMD_RIGHT || cmd == CMD_RIGHT2) {
-      processCommand('d');
+      processCommand(ENGINES_RIGHT);
     } else if (cmd == CMD_STOP || cmd == CMD_STOP2) {
-      processCommand('q');
+      processCommand(ENGINES_STOP);
     }
   }
 }
@@ -78,28 +78,28 @@ void Ubox_Command::processCommand(String cmd) {
  */
 void Ubox_Command::processCommand(char cmd) {
   switch (cmd) {
-    case 'w':
+    case ENGINES_FORWARD:
       _engines->forward();
       break;
-    case 's':
+    case ENGINES_BACKWARD:
       _engines->backward();
       break;
-    case 'a':
+    case ENGINES_LEFT:
       _engines->left();
       break;
-    case 'd':
+    case ENGINES_RIGHT:
       _engines->right();
       break;
-    case 'q':
+    case ENGINES_STOP:
       _engines->stop();
       break;
-    case 'i':
+    case HEAD_CENTER:
       _head->center();
       break;
-    case 'j':
+    case HEAD_LEFT:
       _head->left(0);
       break;
-    case 'l':
+    case HEAD_RIGHT:
       _head->right(0);
       break;
   }

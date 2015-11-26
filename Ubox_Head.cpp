@@ -23,10 +23,10 @@ void Ubox_Head::run() {
         position = 90;
       break;
       case RIGHT:
-        position = map(_pos_servo_head, 0, 100, 0, 90);
+        position = map(_pos_servo_head, 0, 100, 1, 90);
       break;
       case LEFT:
-        position = map(_pos_servo_head, 0, 100, 90, 179);
+        position = map(_pos_servo_head, 0, 100, 178, 90);
       break;
     }
 
