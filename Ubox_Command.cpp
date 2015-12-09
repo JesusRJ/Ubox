@@ -78,7 +78,7 @@ void Ubox_Command::processCommand(char cmd) {
 }
 
 void Ubox_Command::parser(Stream *in) {
-  StaticJsonBuffer<40> jsonBuffer;
+  StaticJsonBuffer<50> jsonBuffer;
 
   // {"cmd":"p","value":"129.222.74.23"}
   // char json[] =
@@ -92,17 +92,13 @@ void Ubox_Command::parser(Stream *in) {
   while ( in->available() ) {
     delay(10); // Delay stabilizing
     c = (char)in->read();
-    // if (c == '\0' || c == '\n') { break; } // end loop when # or \n is detected
     json += c;
   }
 
   if (json.length() > 0) {
     Serial.println(json);
 
-    char jsonBuf[50];
-    json.toCharArray(jsonBuf, 50);
-
-    JsonObject& root = jsonBuffer.parseObject(jsonBuf);
+    JsonObject& root = jsonBuffer.parseObject(json);
 
     if (!root.success()) {
       Serial.println("parseObject() failed");
@@ -111,7 +107,7 @@ void Ubox_Command::parser(Stream *in) {
 
     const char* cmd = root["cmd"];
     const char* value = root["value"];
-
+    
     Serial.println(cmd);
     Serial.println(value);
   }
