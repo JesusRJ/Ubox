@@ -5,18 +5,6 @@
 #ifndef Ubox_Head_h
 #define Ubox_Head_h
 
-#if defined (ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
-#else
-  #include <WProgram.h>
-  #include <pins_arduino.h>
-#endif
-
-#if defined (__AVR__)
-  #include <avr/io.h>
-  #include <avr/interrupt.h>
-#endif
-
 #include <Servo.h>
 #include "Ubox_Base.h"
 #include "Ubox_Sensors.h"

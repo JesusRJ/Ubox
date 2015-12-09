@@ -1,3 +1,4 @@
+#include <ArduinoJson.h>
 #include "Ubox_Command.h"
 
 Ubox_Command::Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval) {
@@ -77,25 +78,53 @@ void Ubox_Command::processCommand(char cmd) {
 }
 
 void Ubox_Command::parser(Stream *in) {
-  String cmd = "";
+  StaticJsonBuffer<40> jsonBuffer;
+
+  // {"cmd":"p","value":"129.222.74.23"}
+  // char json[] =
+  //     "{\"cmd\":\"p\",\"value\":\"129.222.74.23\"}";
+
+  String json = "";
   char c;
 
+  int idx = 0;
+  
   while ( in->available() ) {
     delay(10); // Delay stabilizing
     c = (char)in->read();
-    if (c == '#' || c == '\n') { break; } // end loop when # or \n is detected
-    cmd += c;
+    // if (c == '\0' || c == '\n') { break; } // end loop when # or \n is detected
+    json += c;
   }
 
-  if (cmd.length() > 0) {
-    if (cmd.length() > 1) {
-      processCommand(cmd); // Processa a string de comando
-    } else {
-      processCommand(cmd[0]); // Processa o caracter de comando
+  if (json.length() > 0) {
+    Serial.println(json);
+
+    char jsonBuf[50];
+    json.toCharArray(jsonBuf, 50);
+
+    JsonObject& root = jsonBuffer.parseObject(jsonBuf);
+
+    if (!root.success()) {
+      Serial.println("parseObject() failed");
+      return;
     }
 
-    if (_onDisplay) { 
-      _onDisplay(cmd);
-    }
+    const char* cmd = root["cmd"];
+    const char* value = root["value"];
+
+    Serial.println(cmd);
+    Serial.println(value);
   }
+  
+  // if (cmd.length() > 0) {
+  //   if (cmd.length() > 1) {
+  //     processCommand(cmd); // Processa a string de comando
+  //   } else {
+  //     processCommand(cmd[0]); // Processa o caracter de comando
+  //   }
+
+  //   if (_onDisplay) { 
+  //     _onDisplay(cmd);
+  //   }
+  // }
 }

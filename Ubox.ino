@@ -2,6 +2,8 @@
 #include <LiquidCrystal_I2C.h>
 #include <SoftwareSerial.h>
 #include <NewPing.h>
+#include <Servo.h>
+#include <ArduinoJson.h>
 #include "Ubox_Base.h"
 #include "Ubox_Command.h"
 #include "Ubox_Sensors.h"
@@ -57,8 +59,6 @@ Ubox_Command command(&bluetooth, &head, &engines, INTERVAL_COMMAND);
 Ubox_Sensors sensors(&ultrasonic, pin_ldr, INTERVAL_SENSORS);
 
 void setup() {
-  Serial.begin(9600); // Serial for PC communication
-
   // LCD Display configuration
   lcd.noBacklight();
   lcd.begin (16, 2);
@@ -69,6 +69,12 @@ void setup() {
   lcd.print("Starting...");
 
   // System setup
+  /* Serial for PC communication Initialization */
+  Serial.begin(9600);
+  while (!Serial) {
+    // wait serial port initialization
+  }
+
   /* uBox objects initialization **********************/
   head.setSensors(&sensors); // Reference to sensors
   engines.setSpeed(MIN_SPEED);
@@ -90,9 +96,9 @@ void setup() {
 
 void loop() {
   command.process();
-  sensors.process();
-  head.process();
-  engines.process();
+  // sensors.process();
+  // head.process();
+  // engines.process();
 }
 
 // Print information on second line of LCD Display

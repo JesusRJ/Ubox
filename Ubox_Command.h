@@ -5,18 +5,6 @@
 #ifndef Ubox_Command_h
 #define Ubox_Command_h
 
-#if defined (ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
-#else
-  #include <WProgram.h>
-  #include <pins_arduino.h>
-#endif
-
-#if defined (__AVR__)
-  #include <avr/io.h>
-  #include <avr/interrupt.h>
-#endif
-
 // Engines commands
 #define ENGINES_FORWARD  'w'
 #define ENGINES_BACKWARD 's'

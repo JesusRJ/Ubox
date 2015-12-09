@@ -5,18 +5,6 @@
 #ifndef Ubox_Engines_h
 #define Ubox_Engines_h
 
-#if defined (ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
-#else
-  #include <WProgram.h>
-  #include <pins_arduino.h>
-#endif
-
-#if defined (__AVR__)
-  #include <avr/io.h>
-  #include <avr/interrupt.h>
-#endif
-
 #include "Ubox_Base.h"
 
 #define MIN_SPEED 115 // Min speed to move uBox
