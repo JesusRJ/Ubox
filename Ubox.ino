@@ -80,7 +80,7 @@ void setup() {
   engines.setSpeed(MIN_SPEED);
 
   // Associate callbacks events to classes
-  command.eventDisplay(onDisplayLine2);
+  command.eventDisplay(onDisplayLine1);
   sensors.eventDisplay(onDisplayLine2);
 
   sensors.setLDRState(ON);
@@ -96,13 +96,21 @@ void setup() {
 
 void loop() {
   command.process();
-  // sensors.process();
-  // head.process();
-  // engines.process();
+  sensors.process();
+  head.process();
+  engines.process();
+}
+
+// Print information on first line of LCD Display
+void onDisplayLine1(const char *value) {
+  lcd.setCursor(0, 0);
+  lcd.print(value);
 }
 
 // Print information on second line of LCD Display
-void onDisplayLine2(String& value) {
+void onDisplayLine2(const char *value) {
   lcd.setCursor(0, 1);
   lcd.print(value);
+  // Serial.print("DISPLAY VALUE: ");
+  // Serial.println(value);
 }

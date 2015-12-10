@@ -15,6 +15,8 @@
 #define HEAD_CENTER 'i'
 #define HEAD_LEFT   'j'
 #define HEAD_RIGHT  'l'
+// Other commands
+#define CMD_PRINT 'p'
 
 // Voice commands (pt-BR)
 #define CMD_VOICE_ENABLE "*ativar"
@@ -53,10 +55,8 @@ private:
   Ubox_Head *_head;
   Ubox_Engines *_engines;
   OperationMode _mode = RC;
-  bool _voice_active = false;
 
-  void processCommand(String cmd);
-  void processCommand(char cmd);
+  void processCommand(JsonObject& root);
   void parser(Stream *in);
 };
 

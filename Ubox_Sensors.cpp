@@ -31,7 +31,7 @@ void Ubox_Sensors::run() {
     value += "L: " + String(_lightness);
   }
 
-  _onDisplay(value);
+  _onDisplay(value.c_str());
 }
 
 void Ubox_Sensors::readUltrasonic() {

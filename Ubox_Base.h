@@ -18,7 +18,7 @@
 #endif
 
 // Type for callback function
-typedef void (*commandEventHandler)(String&);
+typedef void (*commandEventHandler)(const char*);
 
 class Ubox_Base {
 public:

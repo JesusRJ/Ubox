@@ -19,37 +19,10 @@ void Ubox_Command::run() {
   parser(_bluetooth);
 }
 
-void Ubox_Command::processCommand(String cmd) {
-  if (cmd == CMD_VOICE_ENABLE) {
-    _voice_active = true;
-  }
+void Ubox_Command::processCommand(JsonObject& root) {
+  const char* cmd = root["@"];
 
-  if (cmd == CMD_VOICE_DISABLE) {
-    _voice_active = false;
-  }
-
-  if (_voice_active) {
-    if (cmd == CMD_FORWARD || cmd == CMD_FORWARD2) {
-      processCommand(ENGINES_FORWARD);
-    } else if (cmd == CMD_BACKWARD || cmd == CMD_BACKWARD2) {
-      processCommand(ENGINES_BACKWARD);
-    } else if (cmd == CMD_LEFT || cmd == CMD_LEFT2) {
-      processCommand(ENGINES_LEFT);
-    } else if (cmd == CMD_RIGHT || cmd == CMD_RIGHT2) {
-      processCommand(ENGINES_RIGHT);
-    } else if (cmd == CMD_STOP || cmd == CMD_STOP2) {
-      processCommand(ENGINES_STOP);
-    }
-  }
-}
-
-/*
- * Commands:
- * w,s,a,d,q = Engines control
- * i,j,l   = Head control
- */
-void Ubox_Command::processCommand(char cmd) {
-  switch (cmd) {
+  switch (cmd[0]) {
     case ENGINES_FORWARD:
       _engines->forward();
       break;
@@ -69,58 +42,59 @@ void Ubox_Command::processCommand(char cmd) {
       _head->center();
       break;
     case HEAD_LEFT:
+      const char* value = root["#"];
       _head->left(0);
       break;
     case HEAD_RIGHT:
       _head->right(0);
       break;
+    case CMD_PRINT:
+      if (_onDisplay) {
+        const char* value = root["#"];
+        Serial.println(value);
+        _onDisplay(value);
+      }
+      break;
   }
 }
 
+/* Parser commands on format:
+ *   {"@":"p","#":["192.168.110.112","192.168.110.112"]}
+ *   {"@":"p","#":"192.168.110.112"}
+ * Where:
+ *   @ = Command Key
+ *   # = Value Key
+ */
 void Ubox_Command::parser(Stream *in) {
-  StaticJsonBuffer<50> jsonBuffer;
+  StaticJsonBuffer<60> jsonBuffer;
 
-  // {"cmd":"p","value":"129.222.74.23"}
-  // char json[] =
-  //     "{\"cmd\":\"p\",\"value\":\"129.222.74.23\"}";
-
-  String json = "";
+  char json[60];
   char c;
-
   int idx = 0;
   
   while ( in->available() ) {
     delay(10); // Delay stabilizing
     c = (char)in->read();
-    json += c;
+    json[idx++] = c;
   }
 
-  if (json.length() > 0) {
+  // String finalize
+  json[idx] = (char)0;
+
+  if (idx > 0) {
+    Serial.print("Received JSON: ");
     Serial.println(json);
 
     JsonObject& root = jsonBuffer.parseObject(json);
 
     if (!root.success()) {
-      Serial.println("parseObject() failed");
+      Serial.println("Json parseObject() failed!");
       return;
     }
 
-    const char* cmd = root["cmd"];
-    const char* value = root["value"];
-    
-    Serial.println(cmd);
-    Serial.println(value);
-  }
-  
-  // if (cmd.length() > 0) {
-  //   if (cmd.length() > 1) {
-  //     processCommand(cmd); // Processa a string de comando
-  //   } else {
-  //     processCommand(cmd[0]); // Processa o caracter de comando
-  //   }
+    if (root.containsKey("@")) {
+      processCommand(root);
+    }
 
-  //   if (_onDisplay) { 
-  //     _onDisplay(cmd);
-  //   }
-  // }
+  }
 }
