@@ -5,6 +5,11 @@
 #ifndef Ubox_Command_h
 #define Ubox_Command_h
 
+#include <SoftwareSerial.h>
+#include "Ubox_Base.h"
+#include "Ubox_Head.h"
+#include "Ubox_Engines.h"
+
 // Engines commands
 #define ENGINES_FORWARD  'w'
 #define ENGINES_BACKWARD 's'
@@ -31,11 +36,6 @@
 #define CMD_RIGHT2 "*pra direita"
 #define CMD_STOP "*parar"
 #define CMD_STOP2 "*parado"
-
-#include <SoftwareSerial.h>
-#include "Ubox_Base.h"
-#include "Ubox_Head.h"
-#include "Ubox_Engines.h"
 
 typedef enum OperationMode { RC, AUTO };
 

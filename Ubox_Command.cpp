@@ -22,39 +22,42 @@ void Ubox_Command::run() {
 void Ubox_Command::processCommand(JsonObject& root) {
   const char* cmd = root["@"];
 
-  switch (cmd[0]) {
-    case ENGINES_FORWARD:
-      _engines->forward();
-      break;
-    case ENGINES_BACKWARD:
-      _engines->backward();
-      break;
-    case ENGINES_LEFT:
-      _engines->left();
-      break;
-    case ENGINES_RIGHT:
-      _engines->right();
-      break;
-    case ENGINES_STOP:
-      _engines->stop();
-      break;
-    case HEAD_CENTER:
-      _head->center();
-      break;
-    case HEAD_LEFT:
-      const char* value = root["#"];
+  if (cmd[0] == ENGINES_FORWARD) {
+    _engines->forward();
+  }
+  else if (cmd[0] == ENGINES_BACKWARD) {
+    _engines->backward();
+  }
+  else if (cmd[0] == ENGINES_LEFT) {
+    _engines->left();
+  }
+  else if (cmd[0] == ENGINES_RIGHT) {
+    _engines->right();
+  }
+  else if (cmd[0] == ENGINES_STOP) {
+    _engines->stop();
+  }
+  else if (cmd[0] == HEAD_CENTER) {
+    _head->center();
+  }
+  else if (cmd[0] == HEAD_LEFT) {
+    if (root.containsKey("#")) {
+      _head->left(root["#"]);
+    } else {
       _head->left(0);
-      break;
-    case HEAD_RIGHT:
+    }
+  }
+  else if (cmd[0] == HEAD_RIGHT) {
+    if (root.containsKey("#")) {
+      _head->right(root["#"]);
+    } else {
       _head->right(0);
-      break;
-    case CMD_PRINT:
-      if (_onDisplay) {
-        const char* value = root["#"];
-        Serial.println(value);
-        _onDisplay(value);
-      }
-      break;
+    }
+  }
+  else if (cmd[0] == CMD_PRINT) {
+    if (_onDisplay) {
+      _onDisplay(root["#"]);
+    }
   }
 }
 

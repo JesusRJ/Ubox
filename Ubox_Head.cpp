@@ -45,11 +45,17 @@ void Ubox_Head::center() {
 void Ubox_Head::right(uint8_t position) {
   setAction(RIGHT);
   setPosition(position);
+
+  Serial.print("Right: ");
+  Serial.println(position);
 }
 
 void Ubox_Head::left(uint8_t position) {
   setAction(LEFT);
   setPosition(position);
+
+  Serial.print("Left: ");
+  Serial.println(position);
 }
 
 ActionHead Ubox_Head::action() {

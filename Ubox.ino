@@ -105,12 +105,14 @@ void loop() {
 void onDisplayLine1(const char *value) {
   lcd.setCursor(0, 0);
   lcd.print(value);
+  Serial.print("Display Line1: ");
+  Serial.println(value);
 }
 
 // Print information on second line of LCD Display
 void onDisplayLine2(const char *value) {
   lcd.setCursor(0, 1);
   lcd.print(value);
-  // Serial.print("DISPLAY VALUE: ");
-  // Serial.println(value);
+  Serial.print("Display Line2: ");
+  Serial.println(value);
 }
