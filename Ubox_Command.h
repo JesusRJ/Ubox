@@ -9,6 +9,7 @@
 #include "Ubox_Base.h"
 #include "Ubox_Head.h"
 #include "Ubox_Engines.h"
+#include "Ubox_Sensors.h"
 
 // Engines commands
 #define ENGINES_FORWARD  'w'
@@ -21,7 +22,9 @@
 #define HEAD_LEFT   'j'
 #define HEAD_RIGHT  'l'
 // Other commands
-#define CMD_PRINT 'p'
+#define CMD_PRINT 'p' // Print strings on LCD display
+#define CMD_GETINFO 'g' // Get Sensors Information
+#define CMD_MODE 'm' // Change Operation Mode: RC or AUTO
 
 // Voice commands (pt-BR)
 #define CMD_VOICE_ENABLE "*ativar"
@@ -48,14 +51,18 @@ public:
     engines: pointer to engines control
     interval: interval to check sensors between process
   */
-  Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engines *engines, unsigned long interval);
+  Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engines *engines,
+               Ubox_Sensors *sensors, unsigned long interval);
   void run();
+  void setMode(OperationMode mode);
 private:
   SoftwareSerial *_bluetooth;
   Ubox_Head *_head;
   Ubox_Engines *_engines;
+  Ubox_Sensors *_sensors;
   OperationMode _mode = RC;
 
+  void processAutonomousMode();
   void processCommand(JsonObject& root);
   void parser(Stream *in);
 };

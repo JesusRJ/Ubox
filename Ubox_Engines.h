@@ -25,15 +25,16 @@ public:
   void setSpeed(uint8_t speed); // Set the speed
   void run(); // Process the action of engines
   void stop(); // Set STOP action
-  void forward(); // Set FORWARD action
-  void backward(); // Set BACKWARD action
-  void right(); // Set RIGHT action
-  void left(); // Set LEFT action
+  void forward(long duration=0); // Set FORWARD action
+  void backward(long duration=0); // Set BACKWARD action
+  void right(long duration=0); // Set RIGHT action with duration
+  void left(long duration=0); // Set LEFT action with duration
   ActionEngine action(); // Return the action value
 private:
   uint8_t *_motor1; // Pointer to motor1 pin definitions
   uint8_t *_motor2; // Pointer to motor2 pin definitions
-  uint8_t _speed = MIN_SPEED; // Current speed 
+  uint8_t _speed = MIN_SPEED; // Current speed
+  long _duration = 0;
   ActionEngine _action = STOP; // Current action
   ActionEngine _last_action = STOP; // Last action control
 

@@ -55,8 +55,8 @@ NewPing ultrasonic(pin_trigger, pin_echo, MAX_SENSOR_DISTANCE);
 //   sensor controller
 Ubox_Head head(pin_servo_head, INTERVAL_HEAD);
 Ubox_Engines engines(motor1, motor2, INTERVAL_ENGINES);
-Ubox_Command command(&bluetooth, &head, &engines, INTERVAL_COMMAND);
 Ubox_Sensors sensors(&ultrasonic, pin_ldr, INTERVAL_SENSORS);
+Ubox_Command command(&bluetooth, &head, &engines, &sensors, INTERVAL_COMMAND);
 
 void setup() {
   // LCD Display configuration
@@ -76,15 +76,14 @@ void setup() {
   }
 
   /* uBox objects initialization **********************/
-  head.setSensors(&sensors); // Reference to sensors
   engines.setSpeed(MIN_SPEED);
 
   // Associate callbacks events to classes
   command.eventDisplay(onDisplayLine1);
   sensors.eventDisplay(onDisplayLine2);
 
-  sensors.setLDRState(ON);
-  sensors.setUltrasonicState(ON);
+  sensors.setLDRState(OFF);
+  sensors.setUltrasonicState(OFF);
 
   /****************************************************/
   // end - System setup

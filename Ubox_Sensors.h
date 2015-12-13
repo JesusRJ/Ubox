@@ -22,13 +22,13 @@ public:
   void setUltrasonicState(SensorState state); // Turn On/Off process of ultrasonic sensor
   void setLDRState(SensorState state); // Turn On/Off process of ldr sensor
   long distance(); // Get last distance read value
-  int lightness(); // Get last lightness read value
+  uint8_t lightness(); // Get last lightness read value
   void run(); // Process read sensors
-  void readUltrasonic(); // Read a Ultrasonic value
-  void readLDR(); // Read actual LDR value
+  long readUltrasonic(); // Read a Ultrasonic value
+  uint8_t readLDR(); // Read actual LDR value
 private:
   uint8_t _pin_ldr;
-  int _lightness = -1;
+  uint8_t _lightness = -1;
   long _distance = -1;
 
   NewPing *_ultrasonic;

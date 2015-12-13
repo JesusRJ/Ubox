@@ -26,6 +26,9 @@ public:
   Ubox_Base();
   void setInterval(unsigned long interval);
   
+  /* Checks if the time elapsed */
+  bool timeElapsed(unsigned long interval);
+  
   /* Events */
   void eventDisplay(commandEventHandler handler);
 
@@ -33,6 +36,7 @@ public:
   virtual void process();
 protected:
   unsigned long _interval = 200;
+  unsigned long _currentTime = 0;
   unsigned long _previousTime = 0;
 
   // Callback pointers for event functions

@@ -55,6 +55,13 @@ void Ubox_Engines::run() {
       break;
     }
   }
+  
+  if (_duration != 0 && timeElapsed(_duration)) {
+    _duration = 0;
+    // Turn off engines
+    motorStop(_motor1);
+    motorStop(_motor2);
+  }
 
   _last_action = _action;
 }
@@ -63,19 +70,23 @@ void Ubox_Engines::stop() {
   setAction(STOP);
 }
 
-void Ubox_Engines::forward() {
+void Ubox_Engines::forward(long duration) {
+  _duration = duration;
   setAction(GO_FORWARD);
 }
 
-void Ubox_Engines::backward() {
+void Ubox_Engines::backward(long duration) {
+  _duration = duration;
   setAction(GO_BACKWARD);
 }
 
-void Ubox_Engines::right() {
+void Ubox_Engines::right(long duration) {
+  _duration = duration;
   setAction(GO_RIGHT);
 }
 
-void Ubox_Engines::left() {
+void Ubox_Engines::left(long duration) {
+  _duration = duration;
   setAction(GO_LEFT);
 }
 

@@ -9,10 +9,6 @@ Ubox_Head::Ubox_Head(uint8_t pin_servo_head, unsigned long interval) {
   _pin_servo_head = pin_servo_head;
 }
 
-void Ubox_Head::setSensors(Ubox_Sensors *sensors) {
-  _sensors = sensors;
-}
-
 void Ubox_Head::run() {
   if (_action != _last_action) {
     uint8_t position;
@@ -42,17 +38,25 @@ void Ubox_Head::center() {
   setAction(CENTER);
 }
 
-void Ubox_Head::right(uint8_t position) {
+void Ubox_Head::right(uint8_t position, bool force) {
   setAction(RIGHT);
   setPosition(position);
+
+  if (force) {
+    _last_action = NONE;
+  }
 
   Serial.print("Right: ");
   Serial.println(position);
 }
 
-void Ubox_Head::left(uint8_t position) {
+void Ubox_Head::left(uint8_t position, bool force) {
   setAction(LEFT);
   setPosition(position);
+
+  if (force) {
+    _last_action = NONE;
+  }
 
   Serial.print("Left: ");
   Serial.println(position);
