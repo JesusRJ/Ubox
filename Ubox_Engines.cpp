@@ -56,7 +56,8 @@ void Ubox_Engines::run() {
     }
   }
   
-  if (_duration != 0 && timeElapsed(_duration)) {
+  if (_duration != 0 && Ubox_Base::timeElapsed(_duration)) {
+    Serial.println("PASSOU");
     _duration = 0;
     // Turn off engines
     motorStop(_motor1);
