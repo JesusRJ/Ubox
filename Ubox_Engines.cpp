@@ -56,12 +56,18 @@ void Ubox_Engines::run() {
     }
   }
   
-  if (_duration != 0 && Ubox_Base::timeElapsed(_duration)) {
-    Serial.println("PASSOU");
-    _duration = 0;
-    // Turn off engines
-    motorStop(_motor1);
-    motorStop(_motor2);
+  if (_duration != 0) {
+    Serial.print("DURACAO: ");
+    Serial.println(_duration);
+    _current_duration = millis();
+    
+    if ((_current_duration - _last_duration) > _duration){
+      Serial.println("PASSOU");
+      _duration = 0;
+      // Turn off engines
+      motorStop(_motor1);
+      motorStop(_motor2);
+    }
   }
 
   _last_action = _action;

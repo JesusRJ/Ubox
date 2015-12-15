@@ -26,9 +26,6 @@ public:
   Ubox_Base();
   void setInterval(unsigned long interval);
   
-  /* Checks if the time elapsed */
-  bool timeElapsed(unsigned long interval);
-  
   /* Events */
   void eventDisplay(commandEventHandler handler);
 

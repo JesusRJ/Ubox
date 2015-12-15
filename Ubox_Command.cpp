@@ -64,7 +64,7 @@ void Ubox_Command::processAutonomousMode() {
     
     _head->center();
     _head->run();
-    //_engines->run();
+    _engines->run();
   }
 }
 

@@ -34,7 +34,9 @@ private:
   uint8_t *_motor1; // Pointer to motor1 pin definitions
   uint8_t *_motor2; // Pointer to motor2 pin definitions
   uint8_t _speed = MIN_SPEED; // Current speed
-  long _duration = 0;
+  unsigned long _duration = 0;
+  unsigned long _current_duration = 0;
+  unsigned long _last_duration = 0;
   ActionEngine _action = STOP; // Current action
   ActionEngine _last_action = STOP; // Last action control
 
