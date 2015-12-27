@@ -66,6 +66,10 @@ void Ubox_Command::processAutonomousMode() {
     _head->run();
     _engines->run();
   }
+
+  if (_engines->action() == STOP) {
+    _engines->forward();
+  }
 }
 
 void Ubox_Command::processCommand(JsonObject& root) {

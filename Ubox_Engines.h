@@ -35,8 +35,6 @@ private:
   uint8_t *_motor2; // Pointer to motor2 pin definitions
   uint8_t _speed = MIN_SPEED; // Current speed
   unsigned long _duration = 0;
-  unsigned long _current_duration = 0;
-  unsigned long _last_duration = 0;
   ActionEngine _action = STOP; // Current action
   ActionEngine _last_action = STOP; // Last action control
 
@@ -44,6 +42,7 @@ private:
   void motorStop(uint8_t *motor); // Put motor to forward action
   void motorForward(uint8_t *motor); // Put motor to forward action
   void motorBackward(uint8_t *motor); // Put motor to backward action
+  void updateInterval(); // Update interval
 };
 
 #endif

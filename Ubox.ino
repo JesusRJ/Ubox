@@ -10,13 +10,6 @@
 #include "Ubox_Engines.h"
 #include "Ubox_Head.h"
 
-// Default values
-#define MAX_SENSOR_DISTANCE 150
-#define INTERVAL_HEAD 100
-#define INTERVAL_ENGINES 100
-#define INTERVAL_COMMAND 100
-#define INTERVAL_SENSORS 500
-
 // Motors pins
 #define pin_m11 4
 #define pin_m12 5
@@ -80,6 +73,7 @@ void setup() {
 
   // Associate callbacks events to classes
   command.eventDisplay(onDisplayLine1);
+  engines.eventDisplay(onDisplayLine1);
   sensors.eventDisplay(onDisplayLine2);
 
   sensors.setLDRState(OFF);

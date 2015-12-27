@@ -55,46 +55,46 @@ void Ubox_Engines::run() {
       break;
     }
   }
-  
-  if (_duration != 0) {
-    Serial.print("DURACAO: ");
-    Serial.println(_duration);
-    _current_duration = millis();
-    
-    if ((_current_duration - _last_duration) > _duration){
-      Serial.println("PASSOU");
-      _duration = 0;
-      // Turn off engines
-      motorStop(_motor1);
-      motorStop(_motor2);
-    }
-  }
 
+  if (_duration != 0 && Ubox_Base::timeElapsed(_duration)) {
+    _duration = 0;
+    updateInterval();
+    // Turn off engines
+    motorStop(_motor1);
+    motorStop(_motor2);
+    _action = STOP;
+  }
+  
   _last_action = _action;
 }
 
 void Ubox_Engines::stop() {
   setAction(STOP);
+  updateInterval();
 }
 
 void Ubox_Engines::forward(long duration) {
   _duration = duration;
   setAction(GO_FORWARD);
+  updateInterval();
 }
 
 void Ubox_Engines::backward(long duration) {
   _duration = duration;
   setAction(GO_BACKWARD);
+  updateInterval();
 }
 
 void Ubox_Engines::right(long duration) {
   _duration = duration;
   setAction(GO_RIGHT);
+  updateInterval();
 }
 
 void Ubox_Engines::left(long duration) {
   _duration = duration;
   setAction(GO_LEFT);
+  updateInterval();
 }
 
 ActionEngine Ubox_Engines::action() {
@@ -107,6 +107,26 @@ ActionEngine Ubox_Engines::action() {
 
 void Ubox_Engines::setAction(ActionEngine action) {
   _action = action;
+
+  if (_onDisplay) {
+    switch (_action) {
+      case STOP:
+        _onDisplay("STOP");
+      break;
+      case GO_FORWARD:
+        _onDisplay("FORWARD");
+      break;
+      case GO_BACKWARD:
+        _onDisplay("BACKWARD");
+      break;
+      case GO_RIGHT:
+        _onDisplay("RIGHT");
+      break;
+      case GO_LEFT:
+        _onDisplay("LEFT");
+      break;
+    }
+  }
 }
 
 void Ubox_Engines::motorStop(uint8_t *motor) {
@@ -125,4 +145,8 @@ void Ubox_Engines::motorBackward(uint8_t *motor) {
   digitalWrite(motor[0], HIGH);
   digitalWrite(motor[1], LOW);
   digitalWrite(motor[2], _speed);	
+}
+
+void Ubox_Engines::updateInterval() {
+  _interval = _duration > 0 ? _duration : INTERVAL_ENGINES;
 }

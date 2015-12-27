@@ -17,6 +17,13 @@
   #include <avr/interrupt.h>
 #endif
 
+// Default values
+#define MAX_SENSOR_DISTANCE 150
+#define INTERVAL_HEAD 100
+#define INTERVAL_ENGINES 100
+#define INTERVAL_COMMAND 100
+#define INTERVAL_SENSORS 500
+
 // Type for callback function
 typedef void (*commandEventHandler)(const char*);
 
@@ -25,6 +32,9 @@ public:
   /* Class constructor. */
   Ubox_Base();
   void setInterval(unsigned long interval);
+
+  /* Checks if the time elapsed */
+  bool timeElapsed(unsigned long interval);
   
   /* Events */
   void eventDisplay(commandEventHandler handler);
