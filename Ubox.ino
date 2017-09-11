@@ -3,7 +3,7 @@
 #include <SoftwareSerial.h>
 #include <NewPing.h>
 #include <Servo.h>
-#include <ArduinoJson.h>
+#include <ArduinoJson.h> //https://bblanchon.github.io/ArduinoJson/
 #include "Ubox_Base.h"
 #include "Ubox_Command.h"
 #include "Ubox_Sensors.h"
@@ -49,15 +49,41 @@ NewPing ultrasonic(pin_trigger, pin_echo, MAX_SENSOR_DISTANCE);
 Ubox_Head head(pin_servo_head, INTERVAL_HEAD);
 Ubox_Engines engines(motor1, motor2, INTERVAL_ENGINES);
 Ubox_Sensors sensors(&ultrasonic, pin_ldr, INTERVAL_SENSORS);
-Ubox_Command command(&bluetooth, &head, &engines, &sensors, INTERVAL_COMMAND);
+Ubox_Command command(&bluetooth, &head, &engines, &sensors, &lcd, INTERVAL_COMMAND);
+
+// LCD Characters
+uint8_t upChar[8]    = {B00000,B00100,B01110,B10101,B00100,B00100,B00100,B00000};
+uint8_t downChar[8]  = {B00000,B00100,B00100,B00100,B10101,B01110,B00100,B00000};
+uint8_t leftChar[8]  = {B00000,B00100,B00010,B11111,B00010,B00100,B00000,B00000};
+uint8_t rightChar[8] = {B00000,B00100,B01000,B11111,B01000,B00100,B00000,B00000};
+uint8_t stopChar[8]  = {B00000,B00000,B01110,B01110,B01110,B00000,B00000,B00000};
+uint8_t heart[8]     = {0x0,0xa,0x1f,0x1f,0xe,0x4,0x0};
+uint8_t clock[8] = {0x0,0xe,0x15,0x17,0x11,0xe,0x0};
+uint8_t bell[8]  = {0x4,0xe,0xe,0xe,0x1f,0x0,0x4};
+// uint8_t note[8]  = {0x2,0x3,0x2,0xe,0x1e,0xc,0x0};
+// uint8_t duck[8]  = {0x0,0xc,0x1d,0xf,0xf,0x6,0x0};
+// uint8_t check[8] = {0x0,0x1,0x3,0x16,0x1c,0x8,0x0};
+// uint8_t cross[8] = {0x0,0x1b,0xe,0x4,0xe,0x1b,0x0};
+// uint8_t retarrow[8] = {0x1,0x1,0x5,0x9,0x1f,0x8,0x4};
 
 void setup() {
-  // LCD Display configuration
-  lcd.noBacklight();
+  // LCD Setup
   lcd.begin (16, 2);
+  // lcd.backlight();
+
+  // LCD Display configuration
+  lcd.createChar(1, upChar);
+  lcd.createChar(2, downChar);
+  lcd.createChar(3, leftChar);
+  lcd.createChar(4, rightChar);
+  lcd.createChar(5, stopChar);
+  lcd.createChar(6, heart);
+  lcd.createChar(7, clock);
+  lcd.createChar(8, bell);
 
   lcd.home();
-  lcd.print("Unisys");
+
+  lcd.print("Miguel Robot");
   lcd.setCursor(0, 1);
   lcd.print("Starting...");
 
@@ -72,9 +98,10 @@ void setup() {
   engines.setSpeed(MIN_SPEED);
 
   // Associate callbacks events to classes
-  command.eventDisplay(onDisplayLine1);
-  engines.eventDisplay(onDisplayLine1);
-  sensors.eventDisplay(onDisplayLine2);
+  command.eventDisplay(onDisplay);
+  command.eventDisplayLine(onDisplayLine1);
+  engines.eventDisplayLine(onDisplayLine1);
+  sensors.eventDisplayLine(onDisplayLine2);
 
   sensors.setLDRState(OFF);
   sensors.setUltrasonicState(OFF);
@@ -84,7 +111,12 @@ void setup() {
 
   delay(500);
   lcd.clear();
-  lcd.print("      uBox      ");
+  lcd.print("      mBox      ");
+  lcd.setCursor(11, 0);
+  lcd.write(6);
+
+  // Set to automactic mode
+  // command.setMode(AUTO);
 }
 
 void loop() {
@@ -94,8 +126,16 @@ void loop() {
   engines.process();
 }
 
+// Print information on LCD Display
+void onDisplay(const char *line1, const char *line2) {
+  onDisplayLine1(line1);
+  onDisplayLine2(line2);
+}
+
 // Print information on first line of LCD Display
 void onDisplayLine1(const char *value) {
+  lcd.setCursor(0, 0);
+  lcd.print("                ");
   lcd.setCursor(0, 0);
   lcd.print(value);
   Serial.print("Display Line1: ");
@@ -104,6 +144,8 @@ void onDisplayLine1(const char *value) {
 
 // Print information on second line of LCD Display
 void onDisplayLine2(const char *value) {
+  lcd.setCursor(0, 1);
+  lcd.print("                ");
   lcd.setCursor(0, 1);
   lcd.print(value);
   Serial.print("Display Line2: ");

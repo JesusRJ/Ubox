@@ -7,6 +7,10 @@ Possui alguns sensores para capturar o ambiente externo e publicar na web.
 
 Além de alguns sensores, possui também uma webcam que pode ser usada para obtenção de fotos e publicação na web.
 
+## Desenvolvimento
+
+O projeto é desenvolvido com o Sublime Text 3, usando o plugin [Stino](https://github.com/Robot-Will/Stino).
+
 ## Características básicas (periféricos e sensores)
 
 - Cubietruck para processamento e conexão com a internet e hospedagem do site web

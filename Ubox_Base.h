@@ -24,8 +24,9 @@
 #define INTERVAL_COMMAND 100
 #define INTERVAL_SENSORS 500
 
-// Type for callback function
-typedef void (*commandEventHandler)(const char*);
+// Type for callback function display
+typedef void (*displayHandler)(const char*, const char*);
+typedef void (*displayHandlerLine)(const char*);
 
 class Ubox_Base {
 public:
@@ -36,8 +37,10 @@ public:
   /* Checks if the time elapsed */
   bool timeElapsed(unsigned long interval);
   
-  /* Events */
-  void eventDisplay(commandEventHandler handler);
+  /* Event Display */
+  void eventDisplay(displayHandler handler);
+  /* Event Display in one line only*/
+  void eventDisplayLine(displayHandlerLine handler);
 
   /* Process function*/
   virtual void process();
@@ -47,7 +50,8 @@ protected:
   unsigned long _previousTime = 0;
 
   // Callback pointers for event functions
-  commandEventHandler _onDisplay; // Callback for display function
+  displayHandler _onDisplay; // Callback for display function
+  displayHandlerLine _onDisplayLine; // Callback for display function line
 
   virtual void run() {};
 };

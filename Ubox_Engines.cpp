@@ -68,32 +68,32 @@ void Ubox_Engines::run() {
   _last_action = _action;
 }
 
-void Ubox_Engines::stop() {
-  setAction(STOP);
+void Ubox_Engines::stop(bool display = true) {
+  setAction(STOP, display);
   updateInterval();
 }
 
-void Ubox_Engines::forward(long duration) {
+void Ubox_Engines::forward(long duration, bool display) {
   _duration = duration;
-  setAction(GO_FORWARD);
+  setAction(GO_FORWARD, display);
   updateInterval();
 }
 
-void Ubox_Engines::backward(long duration) {
+void Ubox_Engines::backward(long duration, bool display) {
   _duration = duration;
-  setAction(GO_BACKWARD);
+  setAction(GO_BACKWARD, display);
   updateInterval();
 }
 
-void Ubox_Engines::right(long duration) {
+void Ubox_Engines::right(long duration, bool display) {
   _duration = duration;
-  setAction(GO_RIGHT);
+  setAction(GO_RIGHT, display);
   updateInterval();
 }
 
-void Ubox_Engines::left(long duration) {
+void Ubox_Engines::left(long duration, bool display) {
   _duration = duration;
-  setAction(GO_LEFT);
+  setAction(GO_LEFT, display);
   updateInterval();
 }
 
@@ -104,26 +104,30 @@ ActionEngine Ubox_Engines::action() {
 // -----
 // PRIVATE METHODS
 // -----
-
+/*
 void Ubox_Engines::setAction(ActionEngine action) {
   _action = action;
+}*/
 
-  if (_onDisplay) {
+void Ubox_Engines::setAction(ActionEngine action, bool display) {
+  _action = action;
+
+  if (_onDisplayLine && display) {
     switch (_action) {
       case STOP:
-        _onDisplay("STOP");
+        _onDisplayLine("STOP");
       break;
       case GO_FORWARD:
-        _onDisplay("FORWARD");
+        _onDisplayLine("FORWARD");
       break;
       case GO_BACKWARD:
-        _onDisplay("BACKWARD");
+        _onDisplayLine("BACKWARD");
       break;
       case GO_RIGHT:
-        _onDisplay("RIGHT");
+        _onDisplayLine("RIGHT");
       break;
       case GO_LEFT:
-        _onDisplay("LEFT");
+        _onDisplayLine("LEFT");
       break;
     }
   }

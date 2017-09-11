@@ -16,8 +16,12 @@ bool Ubox_Base::timeElapsed(unsigned long interval) {
   return (_currentTime - _previousTime > interval);
 }
 
-void Ubox_Base::eventDisplay(commandEventHandler handler) {
+void Ubox_Base::eventDisplay(displayHandler handler) {
   _onDisplay = handler;
+}
+
+void Ubox_Base::eventDisplayLine(displayHandlerLine handler) {
+  _onDisplayLine = handler;
 }
 
 void Ubox_Base::process() {

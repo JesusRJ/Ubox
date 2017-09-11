@@ -2,7 +2,7 @@
 #include "Ubox_Command.h"
 
 Ubox_Command::Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engines *engines,
-                           Ubox_Sensors *sensors, unsigned long interval) {
+                           Ubox_Sensors *sensors, LiquidCrystal_I2C *lcd, unsigned long interval) {
 
   Ubox_Base::setInterval(interval);
 
@@ -10,7 +10,9 @@ Ubox_Command::Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engi
   _head = head;
   _engines = engines;
   _sensors = sensors;
+  _lcd = lcd;
   _onDisplay = 0;
+  _onDisplayLine = 0;
 
   _bluetooth->begin(9600);
 }
@@ -42,34 +44,85 @@ void Ubox_Command::setMode(OperationMode mode) {
  * and check by another direction to follow
  */
 void Ubox_Command::processAutonomousMode() {
-  if (_sensors->distance() <= 20) {
-    _engines->stop();
+  _lcd->clear();
+
+  _onDisplay(String("Dist.: " + String(_sensors->distance())).c_str(),
+             String("Ligh.: " + String(_sensors->lightness())).c_str());
+
+  _lcd->setCursor(15, 0);
+  switch (_engines->action()) {
+      case STOP:
+      _lcd->write(5);
+    break;
+    case GO_FORWARD:
+      _lcd->write(1);
+    break;
+    case GO_BACKWARD:
+      _lcd->write(2);
+    break;
+    case GO_RIGHT:
+      _lcd->write(4);
+    break;
+    case GO_LEFT:
+      _lcd->write(3);
+    break;
+  }
+
+  if (_sensors->distance() > 0 && _sensors->distance() <= 20) {
+    _engines->stop(false);
     _engines->run();
 
-    long left = 0, right = 0;
+    long left = 0, left50 = 0, right = 0, right50 = 0;
 
-    _head->right(0);
-    _head->run();
-    right = _sensors->readUltrasonic();
-
+    // Read left full
     _head->left(0);
     _head->run();
     left = _sensors->readUltrasonic();
+    delay(10);
+    
+    // Read left 50%
+    _head->left(50, true);
+    _head->run();
+    left50 = _sensors->readUltrasonic();
+    delay(10);
 
-    if (left > right) {
-      _engines->left(2000);
+    // Read right full
+    _head->right(0);
+    _head->run();
+    right = _sensors->readUltrasonic();
+    delay(10);
+
+    // Read right 50%
+    _head->right(50, true);
+    _head->run();
+    right50 = _sensors->readUltrasonic();
+    delay(10);
+
+    // Go back
+    if ((left50 > 0 && left50 <= 20) && (right50 > 0 && right50 <= 20)) {
+      _engines->backward(3000, false);
+      _engines->stop(false);
+    }
+
+    // Turn to any direction
+    if (left >= right) {
+      _engines->left(2000, false);
     } else {
-      _engines->right(2000);
+      _engines->right(2000, false);
     }
     
     _head->center();
     _head->run();
     _engines->run();
+  } else {
+    delay(300);
   }
 
   if (_engines->action() == STOP) {
     _engines->forward();
   }
+
+  // {"@":"m","#":1}
 }
 
 void Ubox_Command::processCommand(JsonObject& root) {
@@ -108,8 +161,8 @@ void Ubox_Command::processCommand(JsonObject& root) {
     }
   }
   else if (cmd[0] == CMD_PRINT) {
-    if (_onDisplay) {
-      _onDisplay(root["#"]);
+    if (_onDisplayLine) {
+      _onDisplayLine(root["#"]);
     }
   } else if (cmd[0] == CMD_GETINFO) {
     _sensors->readUltrasonic();
@@ -122,6 +175,9 @@ void Ubox_Command::processCommand(JsonObject& root) {
     
     data.add(_sensors->distance());
     data.add(_sensors->lightness());
+    
+    _onDisplay(String("Dist.: " + String(_sensors->distance())).c_str(),
+               String("Ligh.: " + String(_sensors->lightness())).c_str());
 
     root.printTo(Serial);
   } else if (cmd[0] == CMD_MODE) {
@@ -150,27 +206,28 @@ void Ubox_Command::processCommand(JsonObject& root) {
 void Ubox_Command::parser(Stream *in) {
   StaticJsonBuffer<60> jsonBuffer;
 
-  char json[60];
+  char data[60];
   char c;
   int idx = 0;
   
   while ( in->available() ) {
     delay(10); // Delay stabilizing
     c = (char)in->read();
-    json[idx++] = c;
+    data[idx++] = c;
   }
 
   // String finalize
-  json[idx] = (char)0;
+  data[idx] = (char)0;
 
   if (idx > 0) {
     Serial.print("Received JSON: ");
-    Serial.println(json);
+    Serial.println(data);
 
-    JsonObject& root = jsonBuffer.parseObject(json);
+    JsonObject& root = jsonBuffer.parseObject(data);
 
     if (!root.success()) {
       Serial.println("Json parseObject() failed!");
+      _onDisplayLine(data);
       return;
     }
 

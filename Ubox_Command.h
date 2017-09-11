@@ -6,6 +6,7 @@
 #define Ubox_Command_h
 
 #include <SoftwareSerial.h>
+#include <LiquidCrystal_I2C.h>
 #include "Ubox_Base.h"
 #include "Ubox_Head.h"
 #include "Ubox_Engines.h"
@@ -52,7 +53,7 @@ public:
     interval: interval to check sensors between process
   */
   Ubox_Command(SoftwareSerial *bluetooth, Ubox_Head *head, Ubox_Engines *engines,
-               Ubox_Sensors *sensors, unsigned long interval);
+               Ubox_Sensors *sensors, LiquidCrystal_I2C *lcd, unsigned long interval);
   void run();
   void setMode(OperationMode mode);
 private:
@@ -60,6 +61,7 @@ private:
   Ubox_Head *_head;
   Ubox_Engines *_engines;
   Ubox_Sensors *_sensors;
+  LiquidCrystal_I2C *_lcd; //LCD direct access
   OperationMode _mode = RC;
 
   void processAutonomousMode();
