@@ -145,22 +145,19 @@ void Ubox_Command::processCommand(JsonObject& root) {
   }
   else if (cmd[0] == HEAD_CENTER) {
     _head->center();
-  }
-  else if (cmd[0] == HEAD_LEFT) {
-    if (root.containsKey("#")) {
+  } else if (cmd[0] == HEAD_LEFT) {
+    if (root["#"].success()) {
       _head->left(root["#"], true);
     } else {
       _head->left(0);
     }
-  }
-  else if (cmd[0] == HEAD_RIGHT) {
-    if (root.containsKey("#")) {
+  } else if (cmd[0] == HEAD_RIGHT) {
+    if (root["#"].success()) {
       _head->right(root["#"], true);
     } else {
       _head->right(0);
     }
-  }
-  else if (cmd[0] == CMD_PRINT) {
+  } else if (cmd[0] == CMD_PRINT) {
     if (_onDisplayLine) {
       _onDisplayLine(root["#"]);
     }
@@ -181,12 +178,10 @@ void Ubox_Command::processCommand(JsonObject& root) {
 
     root.printTo(Serial);
   } else if (cmd[0] == CMD_MODE) {
-    if (root.containsKey("#")) {
-      if (root["#"] == 0) {
-        setMode(RC);
-      } else {
-        setMode(AUTO);
-      }
+    if (root["#"] == 0) {
+      setMode(RC);
+    } else {
+      setMode(AUTO);
     }
   }
 }
@@ -204,7 +199,6 @@ void Ubox_Command::processCommand(JsonObject& root) {
  *   # = Value Key
  */
 void Ubox_Command::parser(Stream *in) {
-  StaticJsonBuffer<60> jsonBuffer;
 
   char data[60];
   char c;
@@ -220,19 +214,42 @@ void Ubox_Command::parser(Stream *in) {
   data[idx] = (char)0;
 
   if (idx > 0) {
-    Serial.print("Received JSON: ");
-    Serial.println(data);
+    // Voice parser
+    if (data[0] == '*') {
+      Serial.print("Received Voice: ");
+      Serial.println(data);
 
-    JsonObject& root = jsonBuffer.parseObject(data);
+      StaticJsonBuffer<60> jsonBuffer;
 
-    if (!root.success()) {
-      Serial.println("Json parseObject() failed!");
-      _onDisplayLine(data);
-      return;
-    }
+      JsonObject& root = jsonBuffer.createObject();
 
-    if (root.containsKey("@")) {
+      if (data == CMD_FORWARD || data == CMD_FORWARD2)  { root["@"] = String(ENGINES_FORWARD); }
+      if (data == CMD_BACKWARD ||data == CMD_BACKWARD2) { root["@"] = String(ENGINES_BACKWARD); }
+      if (data == CMD_LEFT || data == CMD_LEFT2)        { root["@"] = String(ENGINES_LEFT); }
+      if (data == CMD_RIGHT || data == CMD_RIGHT2)      { root["@"] = String(ENGINES_RIGHT); }
+      if (data == CMD_STOP || data == CMD_STOP2)        { root["@"] = String(ENGINES_STOP); }
+
+      root.printTo(Serial);
+
       processCommand(root);
+
+    } else {
+      // Json parser
+      Serial.print("Received JSON: ");
+      Serial.println(data);
+
+      StaticJsonBuffer<60> jsonBuffer;
+      JsonObject& root = jsonBuffer.parseObject(data);
+
+      if (!root.success()) {
+        Serial.println("Json parseObject() failed!");
+        _onDisplayLine(data);
+        return;
+      }
+
+      if (root["@"].success()) {
+        processCommand(root);
+      }
     }
   }
 }

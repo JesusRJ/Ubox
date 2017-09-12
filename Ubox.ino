@@ -44,8 +44,8 @@ NewPing ultrasonic(pin_trigger, pin_echo, MAX_SENSOR_DISTANCE);
 // Initialize order:
 //   head controller
 //   engines controller
-//   commands interpreter (by voice/bluetooth and USB serial)
 //   sensor controller
+//   commands interpreter (by voice/bluetooth and USB serial)
 Ubox_Head head(pin_servo_head, INTERVAL_HEAD);
 Ubox_Engines engines(motor1, motor2, INTERVAL_ENGINES);
 Ubox_Sensors sensors(&ultrasonic, pin_ldr, INTERVAL_SENSORS);

@@ -28,18 +28,16 @@
 #define CMD_MODE 'm' // Change Operation Mode: RC or AUTO
 
 // Voice commands (pt-BR)
-#define CMD_VOICE_ENABLE "*ativar"
-#define CMD_VOICE_DISABLE "*desativar"
-#define CMD_FORWARD "*para frente"
-#define CMD_FORWARD2 "*pra frente"
-#define CMD_BACKWARD "*para trás"
-#define CMD_BACKWARD2 "*pra trás"
-#define CMD_LEFT "*esquerda"
-#define CMD_LEFT2 "*pra esquerda"
-#define CMD_RIGHT "*direita"
-#define CMD_RIGHT2 "*pra direita"
-#define CMD_STOP "*parar"
-#define CMD_STOP2 "*parado"
+#define CMD_FORWARD "*para frente#"
+#define CMD_FORWARD2 "*pra frente#"
+#define CMD_BACKWARD "*para trás#"
+#define CMD_BACKWARD2 "*pra trás#"
+#define CMD_LEFT "*esquerda#"
+#define CMD_LEFT2 "*pra esquerda#"
+#define CMD_RIGHT "*direita#"
+#define CMD_RIGHT2 "*pra direita#"
+#define CMD_STOP "*parar#"
+#define CMD_STOP2 "*parado#"
 
 typedef enum OperationMode { RC, AUTO };
 
