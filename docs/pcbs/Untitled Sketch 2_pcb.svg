@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Created with Fritzing (http://www.fritzing.org/) -->
+<svg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.2' baseProfile='tiny' x='0in' y='0in' width='0.24in' height='0.34in' viewBox='0 0 17.28 24.48' >
+<g partID='854253620'><g xmlns="http://www.w3.org/2000/svg" id="copper0" gorn="0.2.0">
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" cx="5.04" gorn="0.2.0.0" cy="5.04" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" cx="5.04" gorn="0.2.0.1" cy="12.24" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" cx="5.04" gorn="0.2.0.2" cy="19.44" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector0pin" cx="5.04" gorn="0.2.0.3" cy="5.04" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector2pin" cx="5.04" gorn="0.2.0.4" cy="12.24" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector4pin" cx="5.04" gorn="0.2.0.5" cy="19.44" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector5pin" cx="12.24" gorn="0.2.0.6" cy="19.44" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector3pin" cx="12.24" gorn="0.2.0.7" cy="12.24" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector1pin" cx="12.24" gorn="0.2.0.8" cy="5.04" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+</g>
+</g><g partID='854253622'><g xmlns="http://www.w3.org/2000/svg" id="copper1" gorn="0.2">
+ <g xmlns="http://www.w3.org/2000/svg" id="copper0" gorn="0.2.0">
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" cx="5.04" gorn="0.2.0.0" cy="5.04" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" cx="5.04" gorn="0.2.0.1" cy="12.24" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" cx="5.04" gorn="0.2.0.2" cy="19.44" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector0pin" cx="5.04" gorn="0.2.0.3" cy="5.04" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector2pin" cx="5.04" gorn="0.2.0.4" cy="12.24" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector4pin" cx="5.04" gorn="0.2.0.5" cy="19.44" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector5pin" cx="12.24" gorn="0.2.0.6" cy="19.44" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector3pin" cx="12.24" gorn="0.2.0.7" cy="12.24" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+  <circle xmlns="http://www.w3.org/2000/svg" stroke-width="1.44" id="connector1pin" cx="12.24" gorn="0.2.0.8" cy="5.04" r="2.13732" stroke="rgb(255, 191, 0)" fill="none"/>
+ </g>
+</g>
+</g><g partID='854253621'><g xmlns="http://www.w3.org/2000/svg" id="silkscreen" gorn="0.1">
+ <line xmlns="http://www.w3.org/2000/svg" stroke-width="0.72" y1="1.44" y2="23.04" x1="1.44" stroke="white" x2="1.44"/>
+ <line xmlns="http://www.w3.org/2000/svg" stroke-width="0.72" y1="23.04" y2="23.04" x1="1.44" stroke="white" x2="15.84"/>
+ <line xmlns="http://www.w3.org/2000/svg" stroke-width="0.72" y1="23.04" y2="1.44" x1="15.84" stroke="white" x2="15.84"/>
+ <line xmlns="http://www.w3.org/2000/svg" stroke-width="0.72" y1="1.44" y2="1.44" x1="15.84" stroke="white" x2="1.44"/>
+ <line xmlns="http://www.w3.org/2000/svg" stroke-width="0.36" y1="3.96" y2="1.44" x1="1.44" stroke="white" x2="3.96"/>
+ <!-- 120 -->
+</g>
+</g></svg>
